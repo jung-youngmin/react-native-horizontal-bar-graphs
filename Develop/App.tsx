@@ -1,5 +1,5 @@
 import React from 'react';
-import {StyleSheet, SafeAreaView, ScrollView} from 'react-native';
+import {StyleSheet, SafeAreaView, Alert} from 'react-native';
 
 import {BarGraph} from './dist';
 
@@ -11,6 +11,9 @@ const App = () => {
           {
             value: 10,
             label: 'data 0',
+            onPress: (label, value, color) => {
+              Alert.alert(label, value + '__' + color.toString());
+            },
           },
           {
             value: 9,
@@ -41,16 +44,21 @@ const App = () => {
             label: 'data 7',
           },
           {
-            value: 1,
+            value: 0,
             label: 'data 8',
           },
           {
-            value: 4,
+            value: 44,
             label: 'data 9',
           },
         ]}
-        totalCnt={10 + 9 + 16 + 12 + 7 + 1 + 4 + 7 + 1 + 4}
+        totalCnt={10 + 9 + 16 + 12 + 7 + 1 + 4 + 7 + 0 + 44}
         percentPosition="right"
+        // barLeftStyle="square"
+        // barRightStyle="square"
+        title="TITLE"
+        titlePosition="top"
+        valuePosition="left"
       />
     </SafeAreaView>
   );
