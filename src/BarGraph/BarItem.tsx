@@ -1,12 +1,22 @@
-import React, { ReactElement, useEffect, useMemo, useState } from "react";
+import React, {
+	ReactElement,
+	useEffect,
+	useMemo,
+	useRef,
+	useState,
+} from "react";
 import {
+	Animated,
 	ColorValue,
 	DimensionValue,
+	Easing,
 	StyleProp,
 	Text,
 	TextStyle,
 	TouchableOpacity,
+	StyleSheet,
 	View,
+	ViewStyle,
 } from "react-native";
 import GraphDivider from "./GraphDivider";
 import PercentLabel from "./PercentLabel";
@@ -17,9 +27,12 @@ interface IBarItemProps {
 	readonly showLabel: boolean;
 	readonly labelStlye: StyleProp<TextStyle>;
 
+	readonly index: number;
+
 	/** 문항의 답변 수 */
 	readonly value: number;
 	readonly showValue: boolean;
+	readonly labelPosition: "top" | "bottom";
 	readonly valuePosition: "left" | "right";
 
 	/** 그래프에서의 색 */
@@ -37,6 +50,7 @@ interface IBarItemProps {
 	readonly barHeight: number;
 	readonly barHolderColor: ColorValue;
 	readonly barDistance: number;
+	readonly barAnimated: boolean;
 	readonly barLeftStyle: "rounded" | "square";
 	readonly barRightStyle: "rounded" | "square";
 
@@ -53,40 +67,70 @@ interface IBarItemProps {
 
 export default function BarItem(props: IBarItemProps) {
 	const percentInteger = useMemo(() => {
-		return Math.round((props.value / props.totalCnt) * 100).toFixed(0);
-	}, [props.value, props.totalCnt]);
+		return props.barAnimated
+			? "0"
+			: Math.round((props.value / props.totalCnt) * 100).toFixed(0);
+	}, [props.barAnimated, props.value, props.totalCnt]);
 
-	// const [labelWdith, setLabelWidth] = useState(props.barHeight);
+	const [isTouched, setIsTouched] = useState<boolean>(false);
 
-	// useEffect(() => {
-	// 	console.log("@@@@", props.label, labelWdith);
-	// }, [labelWdith]);
+	const [barWidth, setBarWidth] = useState<number>(0);
+	const animWidth = useRef(new Animated.Value(0)).current;
+	useEffect(() => {
+		if (barWidth <= 0 || props.barAnimated === false) {
+			return;
+		}
+
+		const w =
+			(barWidth * Math.round((props.value / props.totalCnt) * 100)) / 100;
+
+		Animated.timing(animWidth, {
+			toValue: w,
+			duration: 1000,
+			delay: 80 * (props.index + 1),
+			useNativeDriver: false,
+			isInteraction: true,
+			easing: Easing.out(Easing.exp),
+		}).start();
+	}, [props.barAnimated, props.index, props.value, props.totalCnt, barWidth]);
+
+	const styles = getStyles(
+		props.barHeight,
+		props.barHolderColor,
+		props.color,
+	);
 
 	return (
-		<TouchableOpacity
-			disabled={props.onPress === undefined}
-			style={{ marginTop: props.barDistance }}
-			onPress={() => {
-				if (props.onPress !== undefined) {
-					props.onPress(props.label, props.value, props.color);
-				}
-			}}>
-			<View style={[{}]}>
-				{/* label */}
-				{props.showLabel && (
-					<Text
-						allowFontScaling={false}
-						numberOfLines={2}
-						style={[{ color: "#999999" }, props.labelStlye]}>
-						{props.label}
-					</Text>
-				)}
-				<View style={{ flexDirection: "row", alignItems: "center" }}>
+		<View style={[{ marginTop: props.barDistance }]}>
+			{/* label */}
+			{props.showLabel && props.labelPosition === "top" && (
+				<Text
+					allowFontScaling={false}
+					numberOfLines={2}
+					style={[
+						styles.labelDefault,
+						props.labelStlye,
+						isTouched && { color: props.color },
+					]}>
+					{props.label}
+				</Text>
+			)}
+			<TouchableOpacity
+				activeOpacity={1}
+				onPressIn={() => setIsTouched(true)}
+				onPressOut={() => setIsTouched(false)}
+				onPress={() => {
+					if (props.onPress !== undefined) {
+						props.onPress(props.label, props.value, props.color);
+					}
+				}}>
+				<View style={{ flexDirection: "row" }}>
 					{/* left percent label */}
 					{props.percentPosition === "left" &&
 						(props.PercentLabelComponent === undefined ? (
 							<PercentLabel
 								value={props.value}
+								valueColor={isTouched ? props.color : undefined}
 								totalCnt={props.totalCnt}
 								percentFixed={props.percentFixed}
 								textAlign={"left"}
@@ -96,21 +140,10 @@ export default function BarItem(props: IBarItemProps) {
 							props.PercentLabelComponent
 						))}
 					<View
-						style={{
-							flex: 1,
-							marginHorizontal: props.barHeight / 2,
-							height: props.barHeight,
-							flexDirection: "row",
-							alignItems: "center",
-							backgroundColor: props.barHolderColor,
+						style={styles.barHolder}
+						onLayout={event => {
+							setBarWidth(event.nativeEvent.layout.width);
 						}}>
-						{/* 왼쪽 반원 */}
-						<HalfCircle
-							size={props.barHeight}
-							color={props.color}
-							shape="left"
-							isRounded={props.barLeftStyle === "rounded"}
-						/>
 						{/* 바 홀더 오른쪽 끝 반원 */}
 						<HalfCircle
 							size={props.barHeight}
@@ -123,24 +156,28 @@ export default function BarItem(props: IBarItemProps) {
 								leftPosition={props.barHeight / 2}
 								dividerInterver={props.dividerInterver}
 								dividerHeigt={props.dividerHeight}
-								dividerColor={props.dividerColor}
+								dividerColor={
+									isTouched ? props.color : props.dividerColor
+								}
 							/>
 						)}
-						<View
-							style={{
-								height: props.barHeight,
-								width: `${percentInteger}%` as DimensionValue,
-								backgroundColor: props.color,
-							}}
-							// onLayout={event => {
-							// 	const layoutWidth =
-							// 		event.nativeEvent.layout.width;
-							// 	console.log(props.label, layoutWidth);
-							// 	setLabelWidth(
-							// 		Math.max(layoutWidth, props.barHeight),
-							// 	);
-							// }}
-						>
+						<Animated.View
+							style={[
+								styles.barColored,
+								{
+									width: props.barAnimated
+										? animWidth
+										: ((percentInteger +
+												"%") as DimensionValue),
+								},
+							]}>
+							{/* 왼쪽 반원 */}
+							<HalfCircle
+								size={props.barHeight}
+								color={props.color}
+								shape="left"
+								isRounded={props.barLeftStyle === "rounded"}
+							/>
 							<HalfCircle
 								size={props.barHeight}
 								color={props.color}
@@ -150,13 +187,7 @@ export default function BarItem(props: IBarItemProps) {
 							{props.showValue && (
 								<View
 									style={[
-										{
-											position: "absolute",
-											minWidth: props.barHeight,
-											height: props.barHeight,
-											justifyContent: "center",
-											alignItems: "center",
-										},
+										styles.valueCont,
 										props.valuePosition === "right" && {
 											right: -(props.barHeight / 2),
 										},
@@ -167,13 +198,7 @@ export default function BarItem(props: IBarItemProps) {
 									<Text
 										allowFontScaling={false}
 										numberOfLines={1}
-										style={[
-											{
-												fontSize: props.barHeight / 2,
-												fontWeight: "bold",
-												color: "#F0F0F0",
-											},
-										]}>
+										style={styles.valueText}>
 										{props.valuePosition === "left" &&
 										props.value >= 10
 											? "  "
@@ -186,12 +211,13 @@ export default function BarItem(props: IBarItemProps) {
 									</Text>
 								</View>
 							)}
-						</View>
+						</Animated.View>
 					</View>
 					{props.percentPosition === "right" &&
 						(props.PercentLabelComponent === undefined ? (
 							<PercentLabel
 								value={props.value}
+								valueColor={isTouched ? props.color : undefined}
 								totalCnt={props.totalCnt}
 								percentFixed={props.percentFixed}
 								textAlign={"right"}
@@ -201,8 +227,20 @@ export default function BarItem(props: IBarItemProps) {
 							props.PercentLabelComponent
 						))}
 				</View>
-			</View>
-		</TouchableOpacity>
+			</TouchableOpacity>
+			{props.showLabel && props.labelPosition === "bottom" && (
+				<Text
+					allowFontScaling={false}
+					numberOfLines={2}
+					style={[
+						styles.labelDefault,
+						props.labelStlye,
+						isTouched && { color: props.color },
+					]}>
+					{props.label}
+				</Text>
+			)}
+		</View>
 	);
 }
 
@@ -224,14 +262,12 @@ const HalfCircle = ({
 					position: "absolute",
 					width: size / 2,
 					height: size,
-					overflow: "hidden",
 				},
-				// 안드로이드에서 아주 미세하게 view 사이가 벌어지는 현상 때문에 0.1 더해줌
 				shape === "right" && {
-					right: -(size / 2) + 0.1,
+					right: -(size / 2),
 				},
 				shape === "left" && {
-					left: -(size / 2) + 0.1,
+					left: -(size / 2),
 				},
 			]}>
 			<View
@@ -248,4 +284,39 @@ const HalfCircle = ({
 			/>
 		</View>
 	);
+};
+
+const getStyles = (
+	barHeight: number,
+	barHolderColor: ColorValue,
+	color: ColorValue,
+) => {
+	return StyleSheet.create({
+		labelDefault: { color: "#999999", fontSize: barHeight / 2 },
+		barHolder: {
+			flex: 1,
+			marginHorizontal: barHeight / 2,
+			height: barHeight,
+			flexDirection: "row",
+			alignItems: "center",
+			backgroundColor: barHolderColor,
+		},
+		barColored: {
+			position: "absolute",
+			height: barHeight,
+			backgroundColor: color,
+		},
+		valueCont: {
+			position: "absolute",
+			minWidth: barHeight,
+			height: barHeight,
+			justifyContent: "center",
+			alignItems: "center",
+		},
+		valueText: {
+			fontSize: barHeight / 2,
+			fontWeight: "bold",
+			color: "#F0F0F0",
+		},
+	});
 };

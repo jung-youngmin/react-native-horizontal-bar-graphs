@@ -7,6 +7,7 @@ import {
 	Text,
 	View,
 	StyleSheet,
+	ViewStyle,
 } from "react-native";
 import BarItem from "./BarItem";
 import PercentLabel from "./PercentLabel";
@@ -25,6 +26,8 @@ export interface IBarGraphData {
 export interface IBarGraphProps {
 	readonly graphData: IBarGraphData[];
 	readonly totalCnt: number;
+
+	readonly style?: StyleProp<ViewStyle>;
 
 	readonly title?: string;
 	/** default: "top" */
@@ -48,6 +51,8 @@ export interface IBarGraphProps {
 	readonly barHolderColor?: ColorValue;
 	/** default: 12, 첫번째 바에는 적용되지 않음 */
 	readonly barDistance?: number;
+	/** default: true */
+	readonly barAnimated?: boolean;
 	/** default: "rounded" */
 	readonly barLeftStyle?: "rounded" | "square";
 	/** default: "rounded" */
@@ -55,6 +60,8 @@ export interface IBarGraphProps {
 
 	/** default: true */
 	readonly showLabel?: boolean;
+	/** default: "top" */
+	readonly labelPosition?: "top" | "bottom";
 	/** default: `{ color: "#999999" }` */
 	readonly labelStlye?: StyleProp<TextStyle>;
 
@@ -129,6 +136,10 @@ export default function BarGraph(props: IBarGraphProps) {
 		return props.barDistance === undefined ? 12 : props.barDistance;
 	}, [props.barDistance]);
 
+	const barAnimated = useMemo(() => {
+		return props.barAnimated === undefined ? true : props.barAnimated;
+	}, [props.barAnimated]);
+
 	const barLeftStyle = useMemo(() => {
 		return props.barLeftStyle === undefined
 			? "rounded"
@@ -144,6 +155,10 @@ export default function BarGraph(props: IBarGraphProps) {
 	const showLabel = useMemo(() => {
 		return props.showLabel === undefined ? true : props.showLabel;
 	}, [props.showLabel]);
+
+	const labelPosition = useMemo(() => {
+		return props.labelPosition === undefined ? "top" : props.labelPosition;
+	}, [props.labelPosition]);
 
 	const labelStlye = useMemo(() => {
 		return props.labelStlye === undefined ? null : props.labelStlye;
@@ -195,9 +210,13 @@ export default function BarGraph(props: IBarGraphProps) {
 		}
 	}, [props.percentPosition, percentLblWidth]);
 
+	useEffect(() => {
+		setPercentLblWidth(0);
+	}, [props.percentFixed]);
+
 	return (
-		<View style={{ borderWidth: 4 }}>
-			{showTitle && titlePosition === "top" && (
+		<View style={props.style}>
+			{isLayoutFinished && showTitle && titlePosition === "top" && (
 				<Text style={[styles.title, props.titleStyle]}>
 					{props.title}
 				</Text>
@@ -213,13 +232,16 @@ export default function BarGraph(props: IBarGraphProps) {
 							key={v.label + "_" + i}
 							label={v.label}
 							showLabel={showLabel}
+							labelPosition={labelPosition}
 							labelStlye={labelStlye}
+							index={i}
 							value={v.value}
 							onPress={v.onPress}
 							color={barColor}
 							barHeight={barHeight}
 							barHolderColor={barHolderColor}
 							barDistance={i === 0 ? 0 : barDistance}
+							barAnimated={barAnimated}
 							barLeftStyle={barLeftStyle}
 							barRightStyle={barRightStyle}
 							showValue={showValue}
@@ -248,6 +270,7 @@ export default function BarGraph(props: IBarGraphProps) {
 					}}>
 					<PercentLabel
 						value={1}
+						valueColor={"transparent"}
 						totalCnt={1}
 						percentFixed={percentFixed}
 						textAlign={props.percentPosition}
