@@ -2,12 +2,13 @@ import React, { useMemo } from "react";
 import { ColorValue, DimensionValue, View } from "react-native";
 
 interface IGraphDividerProps {
-	readonly dividerInterver: 4 | 5 | 10 | 20 | 33.3 | 50;
+	readonly dividerInterver: 4 | 5 | 10 | 20 | 25 | 33.3 | 50;
 	readonly leftPosition: number;
 	/** default: "60%" */
-	readonly dividerHeigt: DimensionValue | undefined;
+	readonly dividerHeight: DimensionValue | undefined;
 	/** default: "#BBBBBB" */
 	readonly dividerColor: ColorValue;
+	readonly dividerWidth: number;
 }
 
 export default function GraphDivider(props: IGraphDividerProps) {
@@ -19,16 +20,6 @@ export default function GraphDivider(props: IGraphDividerProps) {
 		}
 		return dividerList;
 	}, [props.dividerInterver]);
-
-	const dividerHeigt = useMemo<DimensionValue>(() => {
-		return props.dividerHeigt === undefined ? "60%" : props.dividerHeigt;
-	}, [props.dividerHeigt]);
-
-	const dividerColor = useMemo(() => {
-		return props.dividerColor === undefined
-			? "#BBBBBB"
-			: props.dividerColor;
-	}, [props.dividerColor]);
 
 	return (
 		<View
@@ -47,10 +38,10 @@ export default function GraphDivider(props: IGraphDividerProps) {
 						style={[
 							{
 								position: "absolute",
-								borderRightWidth: 1,
-								borderColor: dividerColor,
+								borderRightWidth: props.dividerWidth,
+								borderColor: props.dividerColor,
 								width: (div + "%") as DimensionValue,
-								height: dividerHeigt,
+								height: props.dividerHeight,
 								justifyContent: "center",
 								alignItems: "center",
 							},
