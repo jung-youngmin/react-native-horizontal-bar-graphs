@@ -1,11 +1,10 @@
 import React, { useEffect, useMemo, useState } from "react";
-import { ColorValue, DimensionValue, StyleProp, TextStyle, Text, View, StyleSheet, ViewStyle } from "react-native";
-import BarItem, { PercentLabelComp } from "./BarItem";
-import PercentLabel from "./PercentLabel";
+import { ColorValue, DimensionValue, StyleProp, TextStyle, Text, View, StyleSheet, ViewStyle, Animated } from "react-native";
 import { IBarGraphData } from "../horizontal-bar-graphs-types";
 import { DEFAULT_COLORS } from "../consts";
+import StackedBarItem from "./StackedBarITem";
 
-export interface IBarGraphProps {
+export interface IStackedBarProps {
 	readonly graphData: IBarGraphData[];
 	readonly style?: StyleProp<ViewStyle>;
 
@@ -68,10 +67,10 @@ export interface IBarGraphProps {
 	/** default: 0 */
 	readonly percentFixed?: 0 | 1 | 2;
 	/** require Fixed `width` style */
-	readonly PercentLabelComponent?: PercentLabelComp | null | undefined;
+	// readonly PercentLabelComponent?: PercentLabelComp | null | undefined;
 }
 
-export default function BarGraph(props: IBarGraphProps) {
+export default function StackedBar(props: IStackedBarProps) {
 	const totalCnt = useMemo(() => {
 		let total = 0;
 		props.graphData.forEach((item, index) => {
@@ -161,85 +160,85 @@ export default function BarGraph(props: IBarGraphProps) {
 	}, [props.percentFixed]);
 
 	const [percentLblWidth, setPercentLblWidth] = useState<number>(0);
-	const [isLayoutFinished, setIsLayoutFinished] = useState<boolean>(false);
+	// const [isLayoutFinished, setIsLayoutFinished] = useState<boolean>(false);
 
-	useEffect(() => {
-		if (props.PercentLabelComponent === null || props.PercentLabelComponent === undefined) {
-			if (props.percentPosition === undefined) {
-				setIsLayoutFinished(true);
-			} else {
-				if (percentLblWidth > 0) {
-					setIsLayoutFinished(true);
-				} else {
-					setIsLayoutFinished(false);
-				}
-			}
-		} else {
-			setIsLayoutFinished(true);
-		}
-	}, [props.percentPosition, percentLblWidth, props.PercentLabelComponent]);
+	// useEffect(() => {
+	// 	if (props.PercentLabelComponent === null || props.PercentLabelComponent === undefined) {
+	// 		if (props.percentPosition === undefined) {
+	// 			setIsLayoutFinished(true);
+	// 		} else {
+	// 			if (percentLblWidth > 0) {
+	// 				setIsLayoutFinished(true);
+	// 			} else {
+	// 				setIsLayoutFinished(false);
+	// 			}
+	// 		}
+	// 	} else {
+	// 		setIsLayoutFinished(true);
+	// 	}
+	// }, [props.percentPosition, percentLblWidth, props.PercentLabelComponent]);
 
-	useEffect(() => {
-		setPercentLblWidth(0);
-	}, [props.percentFixed]);
+	// useEffect(() => {
+	// 	setPercentLblWidth(0);
+	// }, [props.percentFixed]);
+
+	const [barWidth, setBarWidth] = useState(0);
 
 	return (
 		<View style={props.style}>
-			{isLayoutFinished && showTitle && titlePosition === "top" && <Text style={[styles.title, props.titleStyle]}>{props.title}</Text>}
+			{/* {isLayoutFinished && showTitle && titlePosition === "top" && <Text style={[styles.title, props.titleStyle]}>{props.title}</Text>}
 			{isLayoutFinished ? (
 				props.graphData.map((v, i) => {
 					const barColor = v.color === undefined ? DEFAULT_COLORS[i % DEFAULT_COLORS.length] : v.color;
-					return (
-						<BarItem
-							key={v.label + "_" + i}
-							label={v.label}
-							showLabel={showLabel}
-							labelPosition={labelPosition}
-							labelStlye={labelStlye}
-							index={i}
-							value={v.value}
-							onPress={v.onPress}
-							color={barColor}
-							barHeight={barHeight}
-							barHolderColor={barHolderColor}
-							barDistance={i === 0 ? 0 : barDistance}
-							barAnimated={barAnimated}
-							barAnimateDelay={barAnimateDelay}
-							barLeftStyle={barLeftStyle}
-							barRightStyle={barRightStyle}
-							showValue={showValue}
-							valuePosition={valuePosition}
-							totalCnt={totalCnt}
-							showDivider={showDivider}
-							dividerInterver={dividerInterver}
-							dividerHeight={dividerHeight}
-							dividerColor={dividerColor}
-							dividerWidth={dividerWidth}
-							percentPosition={props.percentPosition}
-							percentFixed={percentFixed}
-							percentLblWidth={percentLblWidth}
-							PercentLabelComponent={props.PercentLabelComponent}
-						/>
-					);
+					return <></>;
 				})
 			) : (
-				<View
-					style={{ position: "absolute" }}
-					onLayout={event => {
-						if (percentLblWidth === 0) {
-							setPercentLblWidth(Math.round(event.nativeEvent.layout.width) + 4);
-						}
-					}}>
-					<PercentLabel
-						value={1}
-						valueColor={"transparent"}
-						totalCnt={1}
-						percentFixed={percentFixed}
-						textAlign={props.percentPosition}
-						percentLblWidth={percentLblWidth}
-					/>
-				</View>
-			)}
+				<></>
+			)} */}
+			{showTitle && titlePosition === "top" && <Text style={[styles.title, props.titleStyle]}>{props.title}</Text>}
+			<View
+				style={{ flexDirection: "row", overflow: "hidden", width: "100%", height: barHeight, borderRadius: barHeight / 2 }}
+				onLayout={event => {
+					setBarWidth(event.nativeEvent.layout.width);
+				}}>
+				{barWidth > 0 &&
+					props.graphData.map((item, index) => {
+						// const percent = ((item.value / totalCnt) * 100 + "%") as DimensionValue;
+						const barColor = item.color === undefined ? DEFAULT_COLORS[index % DEFAULT_COLORS.length] : item.color;
+						return (
+							<StackedBarItem
+								key={item.label + "_" + index}
+								label={item.label}
+								containerWidth={barWidth}
+								showLabel={showLabel}
+								labelPosition={labelPosition}
+								labelStlye={labelStlye}
+								index={index}
+								value={item.value}
+								onPress={item.onPress}
+								color={barColor}
+								barHeight={barHeight}
+								barHolderColor={barHolderColor}
+								barDistance={index === 0 ? 0 : barDistance}
+								barAnimated={barAnimated}
+								barAnimateDelay={barAnimateDelay}
+								barLeftStyle={barLeftStyle}
+								barRightStyle={barRightStyle}
+								showValue={showValue}
+								valuePosition={valuePosition}
+								totalCnt={totalCnt}
+								showDivider={showDivider}
+								dividerInterver={dividerInterver}
+								dividerHeight={dividerHeight}
+								dividerColor={dividerColor}
+								dividerWidth={dividerWidth}
+								percentPosition={props.percentPosition}
+								percentFixed={percentFixed}
+								percentLblWidth={percentLblWidth}
+							/>
+						);
+					})}
+			</View>
 			{showTitle && titlePosition === "bottom" && <Text style={[styles.title, props.titleStyle]}>{props.title}</Text>}
 		</View>
 	);

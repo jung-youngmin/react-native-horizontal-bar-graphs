@@ -59,7 +59,6 @@ export default function BarItem(props: IBarItemProps) {
 			return;
 		}
 
-		animWidth.setValue(0);
 		const w = (barWidth * valPercent) / 100;
 
 		Animated.timing(animWidth, {
@@ -70,6 +69,10 @@ export default function BarItem(props: IBarItemProps) {
 			isInteraction: true,
 			easing: Easing.out(Easing.exp),
 		}).start();
+
+		return () => {
+			animWidth.setValue(0);
+		};
 	}, [props.barAnimated, props.barAnimateDelay, props.index, props.value, props.totalCnt, barWidth]);
 
 	const { PercentLabelComponent } = props;
