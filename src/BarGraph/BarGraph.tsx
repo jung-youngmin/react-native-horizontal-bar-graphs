@@ -1,8 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { ColorValue, DimensionValue, StyleProp, TextStyle, Text, View, StyleSheet, ViewStyle } from "react-native";
-import BarItem, { PercentLabelComp } from "./BarItem";
-import PercentLabel from "./PercentLabel";
-import { IBarGraphData } from "../horizontal-bar-graphs-types";
+import BarItem from "./BarItem";
+import PercentLabel from "../Shared/PercentLabel";
+import { IBarGraphData, PercentLabelComp } from "../horizontal-bar-graphs-types";
 import { DEFAULT_COLORS } from "../consts";
 
 export interface IBarGraphProps {
@@ -179,9 +179,9 @@ export default function BarGraph(props: IBarGraphProps) {
 		}
 	}, [props.percentPosition, percentLblWidth, props.PercentLabelComponent]);
 
-	useEffect(() => {
+	useLayoutEffect(() => {
 		setPercentLblWidth(0);
-	}, [props.percentFixed]);
+	}, [props.percentFixed, props.barHeight]);
 
 	return (
 		<View style={props.style}>
@@ -233,6 +233,7 @@ export default function BarGraph(props: IBarGraphProps) {
 					<PercentLabel
 						value={1}
 						valueColor={"transparent"}
+						barHeight={barHeight}
 						totalCnt={1}
 						percentFixed={percentFixed}
 						textAlign={props.percentPosition}
@@ -240,7 +241,7 @@ export default function BarGraph(props: IBarGraphProps) {
 					/>
 				</View>
 			)}
-			{showTitle && titlePosition === "bottom" && <Text style={[styles.title, props.titleStyle]}>{props.title}</Text>}
+			{isLayoutFinished && showTitle && titlePosition === "bottom" && <Text style={[styles.title, props.titleStyle]}>{props.title}</Text>}
 		</View>
 	);
 }

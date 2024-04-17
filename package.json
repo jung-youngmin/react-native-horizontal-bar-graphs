@@ -1,50 +1,51 @@
 {
-  "name": "react-native-horizontal-bar-graphs",
-  "version": "0.0.1",
-  "description": "react-native horizontal bar graphs",
-  "main": "dist/index.js",
-  "types": "dist/index.d.ts",
-  "scripts": {
-    "lint": "eslint --ext .tsx --ext .ts src/",
-    "format": "prettier --check ./src",
-    "start": "rmdir /s /q Develop\\dist && tsc -w --outDir Develop\\dist",
-    "start:expo": "rmdir /s /q DevelopWithExpo/dist && tsc -w --outDir DevelopWithExpo/dist",
-    "prepare": "rmdir /s /q dist && tsc"
-  },
-  "peerDependencies": {
-    "react": "*",
-    "react-native": "*"
-  },
-  "devDependencies": {
-    "@babel/core": "^7.20.0",
-    "@babel/preset-env": "^7.20.0",
-    "@babel/runtime": "^7.20.0",
-    "@react-native/babel-preset": "0.73.21",
-    "@react-native/eslint-config": "0.73.2",
-    "@react-native/metro-config": "0.73.5",
-    "@react-native/typescript-config": "0.73.1",
-    "@types/react": "^18.2.6",
-    "@types/react-test-renderer": "^18.0.0",
-    "babel-jest": "^29.6.3",
-    "eslint": "^8.19.0",
-    "jest": "^29.6.3",
-    "prettier": "2.8.8",
-    "react-test-renderer": "18.2.0",
-    "typescript": "5.0.4"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/jung-youngmin/react-native-horizontal-bar-graphs.git"
-  },
-  "keywords": [
-    "react-native",
-    "chart",
-    "graph"
-  ],
-  "author": "Jung-YoungMin <duddud311@gmail.com>",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/issues"
-  },
-  "homepage": "https://github.com/jung-youngmin/react-native-horizontal-bar-graphs#readme"
+	"name": "react-native-horizontal-bar-graphs",
+	"version": "0.0.1",
+	"description": "react-native horizontal bar graphs",
+	"main": "dist/index.js",
+	"types": "dist/index.d.ts",
+	"scripts": {
+		"lint": "eslint --ext .tsx --ext .ts src/",
+		"format": "prettier --check ./src",
+		"start": "rmdir /s /q Develop\\dist && tsc -w --outDir Develop\\dist",
+		"start:expo": "rmdir /s /q DevelopWithExpo/dist && tsc -w --outDir DevelopWithExpo/dist",
+		"prepare": "rmdir /s /q dist && tsc",
+		"android": "cd Develop && npm run android"
+	},
+	"peerDependencies": {
+		"react": "*",
+		"react-native": "*"
+	},
+	"devDependencies": {
+		"@babel/core": "^7.20.0",
+		"@babel/preset-env": "^7.20.0",
+		"@babel/runtime": "^7.20.0",
+		"@react-native/babel-preset": "0.73.21",
+		"@react-native/eslint-config": "0.73.2",
+		"@react-native/metro-config": "0.73.5",
+		"@react-native/typescript-config": "0.73.1",
+		"@types/react": "^18.2.6",
+		"@types/react-test-renderer": "^18.0.0",
+		"babel-jest": "^29.6.3",
+		"eslint": "^8.19.0",
+		"jest": "^29.6.3",
+		"prettier": "2.8.8",
+		"react-test-renderer": "18.2.0",
+		"typescript": "5.0.4"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/jung-youngmin/react-native-horizontal-bar-graphs.git"
+	},
+	"keywords": [
+		"react-native",
+		"chart",
+		"graph"
+	],
+	"author": "Jung-YoungMin <duddud311@gmail.com>",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/issues"
+	},
+	"homepage": "https://github.com/jung-youngmin/react-native-horizontal-bar-graphs#readme"
 }

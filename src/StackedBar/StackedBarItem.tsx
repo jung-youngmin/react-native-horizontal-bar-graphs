@@ -1,44 +1,21 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
-import { ColorValue, DimensionValue, StyleProp, TextStyle, Text, View, StyleSheet, ViewStyle, Animated, Easing } from "react-native";
-import { IBarGraphData } from "../horizontal-bar-graphs-types";
-import { DEFAULT_COLORS } from "../consts";
+import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import { ColorValue, DimensionValue, StyleSheet, Animated, Easing } from "react-native";
 
 export interface IStackedBarItemProps {
-	// readonly label: string;
-	// readonly showLabel: boolean;
-	// readonly labelStlye: StyleProp<TextStyle>;
-
 	readonly index: number;
 
 	readonly value: number;
 	readonly containerWidth: number;
-	// readonly showValue: boolean;
-	// readonly labelPosition: "top" | "bottom";
-	// readonly valuePosition: "left" | "right";
 
 	readonly color: ColorValue;
 	// readonly onPress: ((label: string, value: number, color: ColorValue) => void | Promise<void>) | undefined;
-
+	/** 전체 갯수(분모) */
 	readonly totalCnt: number;
 
 	readonly barHeight: number;
-	// readonly barHolderColor: ColorValue;
-	// readonly barDistance: number;
 	readonly barAnimated: boolean;
-	// readonly barAnimateDelay: number;
-	// readonly barLeftStyle: "rounded" | "square";
-	// readonly barRightStyle: "rounded" | "square";
-
-	// readonly showDivider: boolean;
-	// readonly dividerInterver: 4 | 5 | 10 | 20 | 25 | 33.3 | 50;
-	// readonly dividerHeight: DimensionValue;
-	// readonly dividerColor: ColorValue;
-	// readonly dividerWidth: number;
-
-	// readonly percentPosition: "left" | "right" | undefined;
-	// readonly percentFixed: 0 | 1 | 2;
-	// readonly percentLblWidth: number;
-	// readonly PercentLabelComponent: PercentLabelComp | null | undefined;
+	readonly barLeftStyle: "rounded" | "square";
+	readonly barRightStyle: "rounded" | "square";
 }
 
 export default function StackedBarItem(props: IStackedBarItemProps) {
@@ -46,15 +23,13 @@ export default function StackedBarItem(props: IStackedBarItemProps) {
 		return Math.round((props.value / props.totalCnt) * 100);
 	}, [props.value / props.totalCnt]);
 
-	// const [barWidth, setBarWidth] = useState<number>(0);
 	const animWidth = useRef(new Animated.Value(0)).current;
-	useEffect(() => {
+	useLayoutEffect(() => {
 		if (props.containerWidth <= 0 || props.barAnimated === false) {
 			return;
 		}
 
 		const w = (props.containerWidth * valPercent) / 100;
-		console.log("@@@ w", w);
 
 		Animated.timing(animWidth, {
 			toValue: w,
@@ -70,14 +45,33 @@ export default function StackedBarItem(props: IStackedBarItemProps) {
 		};
 	}, [props.barAnimated, props.index, props.value, props.totalCnt, props.containerWidth]);
 
-	return <Animated.View style={{ width: animWidth, height: props.barHeight, backgroundColor: props.color }}></Animated.View>;
+	const styles = getStyles(props.barHeight, props.color);
+
+	return (
+		<Animated.View
+			style={[
+				styles.colorBarStyle,
+				{ width: props.barAnimated ? animWidth : ((valPercent + "%") as DimensionValue) },
+				props.barLeftStyle === "rounded" && styles.roundedLeftBar,
+				props.barRightStyle === "rounded" && styles.roundedRightBar,
+			]}
+		/>
+	);
 }
 
-const styles = StyleSheet.create({
-	title: {
-		fontWeight: "bold",
-		fontSize: 20,
-		textAlign: "center",
-		marginVertical: 16,
-	},
-});
+const getStyles = (barHeight: number, color: ColorValue) => {
+	return StyleSheet.create({
+		colorBarStyle: {
+			height: barHeight,
+			backgroundColor: color,
+		},
+		roundedLeftBar: {
+			borderTopLeftRadius: barHeight / 2,
+			borderBottomLeftRadius: barHeight / 2,
+		},
+		roundedRightBar: {
+			borderTopRightRadius: barHeight / 2,
+			borderBottomRightRadius: barHeight / 2,
+		},
+	});
+};

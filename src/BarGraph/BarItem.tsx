@@ -1,9 +1,8 @@
-import React, { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Animated, ColorValue, DimensionValue, Easing, StyleProp, Text, TextStyle, TouchableOpacity, StyleSheet, View } from "react-native";
-import GraphDivider from "./GraphDivider";
-import PercentLabel from "./PercentLabel";
-
-export type PercentLabelComp = ({ value, total }: { value: number; total: number }) => ReactElement;
+import GraphDivider from "../Shared/GraphDivider";
+import PercentLabel from "../Shared/PercentLabel";
+import { PercentLabelComp } from "../horizontal-bar-graphs-types";
 
 interface IBarItemProps {
 	/** 설문 문항 내용 */
@@ -76,25 +75,23 @@ export default function BarItem(props: IBarItemProps) {
 	}, [props.barAnimated, props.barAnimateDelay, props.index, props.value, props.totalCnt, barWidth]);
 
 	const { PercentLabelComponent } = props;
-	const PercentLbl = useCallback(
-		({ value, total }: { value: number; total: number }) => {
-			if (PercentLabelComponent === null || PercentLabelComponent === undefined) {
-				return (
-					<PercentLabel
-						value={props.value}
-						valueColor={isTouched ? props.color : undefined}
-						totalCnt={props.totalCnt}
-						percentFixed={props.percentFixed}
-						textAlign={props.percentPosition}
-						percentLblWidth={props.percentLblWidth}
-					/>
-				);
-			} else {
-				return <PercentLabelComponent value={value} total={total} />;
-			}
-		},
-		[props.percentPosition, props.PercentLabelComponent],
-	);
+	const PercentLbl = ({ value, total }: { value: number; total: number }) => {
+		if (PercentLabelComponent === null || PercentLabelComponent === undefined) {
+			return (
+				<PercentLabel
+					value={value}
+					valueColor={isTouched ? props.color : undefined}
+					barHeight={props.barHeight}
+					totalCnt={total}
+					percentFixed={props.percentFixed}
+					textAlign={props.percentPosition}
+					percentLblWidth={props.percentLblWidth}
+				/>
+			);
+		} else {
+			return <PercentLabelComponent value={value} total={total} />;
+		}
+	};
 
 	const styles = getStyles(props.barHeight, props.barHolderColor, props.color);
 
@@ -115,7 +112,7 @@ export default function BarItem(props: IBarItemProps) {
 						props.onPress(props.label, props.value, props.color);
 					}
 				}}>
-				<View style={{ flexDirection: "row" }}>
+				<View style={{ flexDirection: "row", alignItems: "center" }}>
 					{/* left percent label */}
 					{props.percentPosition === "left" && <PercentLbl value={props.value} total={props.totalCnt} />}
 					<View
