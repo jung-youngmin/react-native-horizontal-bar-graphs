@@ -1,5 +1,12 @@
 import React, {useState} from 'react';
-import {StyleSheet, SafeAreaView, Alert, Button} from 'react-native';
+import {
+  StyleSheet,
+  SafeAreaView,
+  Alert,
+  Button,
+  View,
+  Text,
+} from 'react-native';
 
 import {BarGraph, IBarGraphData, StackedBar} from './dist';
 
@@ -105,6 +112,7 @@ const App = () => {
             // {display: showStackedBarGraph ? 'flex' : 'none'},
           ]}
           // totalCnt={10 + 9 + 16 + 12 + 7 + 1 + 4 + 7 + 0 + 44}
+          // barHeight={32}
           // percentPosition="left"
           percentPosition="right"
           percentFixed={2}
@@ -113,12 +121,13 @@ const App = () => {
           // barRightStyle="square"
           title="TITLE"
           titlePosition="top"
-          valuePosition="right"
           // labelPosition="bottom"
           barAnimated={true}
           // valuePosition="left"
           // labelPosition="bottom"
           dividerWidth={1}
+          // showList={false}
+          listAnimated={true}
           // dividerHeight={'100%'}
           // dividerInterver={25}
           // barAnimateDelay={0}
@@ -129,6 +138,12 @@ const App = () => {
           //     </Text>
           //   );
           // }}
+
+          // PercentLabelComponent={lblProps => (
+          //   <View style={{width: 40}}>
+          //     <Text>{lblProps.value}</Text>
+          //   </View>
+          // )}
         />
       )}
     </SafeAreaView>
@@ -141,6 +156,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#DDDDDD',
   },
   graphContainer: {
+    // flex: 1,
     margin: 16,
     padding: 16,
     borderRadius: 16,

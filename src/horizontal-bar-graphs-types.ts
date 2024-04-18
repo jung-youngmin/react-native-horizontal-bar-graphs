@@ -8,4 +8,10 @@ export interface IBarGraphData {
 	readonly onPress?: (label: string, value: number, color: ColorValue) => void | Promise<void>;
 }
 
-export type PercentLabelComp = ({ value, total }: { value: number; total: number }) => ReactElement;
+export interface IPercentLabelCompProps {
+	readonly value: number;
+	readonly total: number;
+	readonly color: ColorValue | undefined;
+}
+
+export type PercentLabelComp = (props: IPercentLabelCompProps) => ReactElement;

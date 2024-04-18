@@ -1,26 +1,30 @@
 import React, { useEffect, useMemo, useRef } from "react";
-import { ColorValue, DimensionValue, StyleSheet, Animated, Easing, View, Text } from "react-native";
+import { ColorValue, StyleSheet, Animated, Easing, View, Text, TouchableOpacity } from "react-native";
 import { IBarGraphData, PercentLabelComp } from "../horizontal-bar-graphs-types";
-import PercentLabel from "../Shared/PercentLabel";
 
 export interface IStackedListItemProps extends IBarGraphData {
+	readonly color: ColorValue;
 	readonly index: number;
 	readonly totalCnt: number;
-	// readonly barHeight: number;
+	readonly percentPosition: "left" | "right" | undefined;
 	readonly percentFixed: 0 | 1 | 2;
 	/** require Fixed `width` style */
-	readonly PercentLabelComponent?: PercentLabelComp | null | undefined;
+	readonly PercentLabelComponent: PercentLabelComp;
+	readonly onTouching: (index: number, isTouched: boolean) => void | Promise<void>;
+	readonly listAnimated: boolean;
 }
 
-export default function StackedListItem(props: IStackedListItemProps) {
-	const valPercent = useMemo(() => {
-		return Math.round((props.value / props.totalCnt) * 100);
-	}, [props.value / props.totalCnt]);
-
+export default React.memo(_StackedListItem);
+function _StackedListItem(props: IStackedListItemProps) {
 	const { PercentLabelComponent } = props;
+	const canRenderPercentLbl = PercentLabelComponent !== null && PercentLabelComponent !== undefined;
 
 	const animOpacity = useRef(new Animated.Value(0)).current;
 	useEffect(() => {
+		if (props.listAnimated === false) {
+			animOpacity.setValue(1);
+			return;
+		}
 		Animated.timing(animOpacity, {
 			toValue: 1,
 			duration: 1000,
@@ -33,16 +37,40 @@ export default function StackedListItem(props: IStackedListItemProps) {
 		return () => {
 			animOpacity.setValue(0);
 		};
-	}, [props.index]);
+	}, [props.listAnimated, props.index]);
 
-	// const styles = getStyles();
+	const styles = useMemo(() => {
+		return getStyles(props.color);
+	}, [props.color]);
+
 	return (
-		<Animated.View style={[{ borderWidth: 1, backgroundColor: props.color, opacity: animOpacity }]}>
-			<View>
-				<Text>{props.label}</Text>
-				<Text>{props.value}</Text>
-				{PercentLabelComponent !== null && PercentLabelComponent !== undefined && <PercentLabelComponent value={props.value} total={props.totalCnt} />}
-			</View>
-		</Animated.View>
+		<TouchableOpacity
+			onPressIn={() => props.onTouching(props.index, true)}
+			onPressOut={() => props.onTouching(props.index, false)}
+			onPress={() => props.onPress?.(props.label, props.value, props.color)}>
+			<Animated.View style={[{ opacity: animOpacity }, styles.listItemContainer]}>
+				{canRenderPercentLbl && props.percentPosition === "left" && (
+					<PercentLabelComponent value={props.value} total={props.totalCnt} color={props.color} />
+				)}
+				{(props.percentPosition === "right" || props.percentPosition === undefined) && <View style={styles.coloredDot} />}
+				<View style={styles.textContainer}>
+					<Text style={styles.labelStyle}>{props.label}</Text>
+					<Text>{props.value}</Text>
+				</View>
+				{canRenderPercentLbl && props.percentPosition === "right" && (
+					<PercentLabelComponent value={props.value} total={props.totalCnt} color={props.color} />
+				)}
+				{props.percentPosition === "left" && <View style={styles.coloredDot} />}
+			</Animated.View>
+		</TouchableOpacity>
 	);
 }
+
+const getStyles = (color: ColorValue) => {
+	return StyleSheet.create({
+		listItemContainer: { paddingVertical: 8, flexDirection: "row", alignItems: "center" },
+		coloredDot: { width: 20, height: 20, backgroundColor: color, borderRadius: 24 },
+		textContainer: { flex: 1, marginLeft: 16 },
+		labelStyle: { fontSize: 16 },
+	});
+};

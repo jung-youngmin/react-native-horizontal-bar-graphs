@@ -2,7 +2,7 @@ import React, { useEffect, useMemo, useRef, useState } from "react";
 import { Animated, ColorValue, DimensionValue, Easing, StyleProp, Text, TextStyle, TouchableOpacity, StyleSheet, View } from "react-native";
 import GraphDivider from "../Shared/GraphDivider";
 import PercentLabel from "../Shared/PercentLabel";
-import { PercentLabelComp } from "../horizontal-bar-graphs-types";
+import { IPercentLabelCompProps, PercentLabelComp } from "../horizontal-bar-graphs-types";
 
 interface IBarItemProps {
 	/** 설문 문항 내용 */
@@ -75,21 +75,21 @@ export default function BarItem(props: IBarItemProps) {
 	}, [props.barAnimated, props.barAnimateDelay, props.index, props.value, props.totalCnt, barWidth]);
 
 	const { PercentLabelComponent } = props;
-	const PercentLbl = ({ value, total }: { value: number; total: number }) => {
+	const PercentLbl = (lblProps: IPercentLabelCompProps) => {
 		if (PercentLabelComponent === null || PercentLabelComponent === undefined) {
 			return (
 				<PercentLabel
-					value={value}
+					value={lblProps.value}
 					valueColor={isTouched ? props.color : undefined}
 					barHeight={props.barHeight}
-					totalCnt={total}
+					totalCnt={lblProps.total}
 					percentFixed={props.percentFixed}
 					textAlign={props.percentPosition}
 					percentLblWidth={props.percentLblWidth}
 				/>
 			);
 		} else {
-			return <PercentLabelComponent value={value} total={total} />;
+			return <PercentLabelComponent {...lblProps} />;
 		}
 	};
 
@@ -114,7 +114,7 @@ export default function BarItem(props: IBarItemProps) {
 				}}>
 				<View style={{ flexDirection: "row", alignItems: "center" }}>
 					{/* left percent label */}
-					{props.percentPosition === "left" && <PercentLbl value={props.value} total={props.totalCnt} />}
+					{props.percentPosition === "left" && <PercentLbl value={props.value} total={props.totalCnt} color={props.color} />}
 					<View
 						style={styles.barHolder}
 						onLayout={event => {
@@ -161,7 +161,7 @@ export default function BarItem(props: IBarItemProps) {
 							)}
 						</Animated.View>
 					</View>
-					{props.percentPosition === "right" && <PercentLbl value={props.value} total={props.totalCnt} />}
+					{props.percentPosition === "right" && <PercentLbl value={props.value} total={props.totalCnt} color={props.color} />}
 				</View>
 			</TouchableOpacity>
 			{props.showLabel && props.labelPosition === "bottom" && (

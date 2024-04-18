@@ -16,9 +16,12 @@ export interface IStackedBarItemProps {
 	readonly barAnimated: boolean;
 	readonly barLeftStyle: "rounded" | "square";
 	readonly barRightStyle: "rounded" | "square";
-}
 
-export default function StackedBarItem(props: IStackedBarItemProps) {
+	readonly isTouched: boolean;
+}
+export default React.memo(_StackedBarItem);
+function _StackedBarItem(props: IStackedBarItemProps) {
+	// console.log("@@@", props.isTouched, props.index);
 	const valPercent = useMemo(() => {
 		return Math.round((props.value / props.totalCnt) * 100);
 	}, [props.value / props.totalCnt]);
@@ -52,6 +55,7 @@ export default function StackedBarItem(props: IStackedBarItemProps) {
 			style={[
 				styles.colorBarStyle,
 				{ width: props.barAnimated ? animWidth : ((valPercent + "%") as DimensionValue) },
+				props.isTouched && { opacity: 0.4 },
 				props.barLeftStyle === "rounded" && styles.roundedLeftBar,
 				props.barRightStyle === "rounded" && styles.roundedRightBar,
 			]}

@@ -1,6 +1,6 @@
-import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
+import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { ColorValue, DimensionValue, StyleProp, TextStyle, Text, View, StyleSheet, ViewStyle } from "react-native";
-import { IBarGraphData, PercentLabelComp } from "../horizontal-bar-graphs-types";
+import { IBarGraphData, IPercentLabelCompProps, PercentLabelComp } from "../horizontal-bar-graphs-types";
 import { DEFAULT_COLORS } from "../consts";
 import GraphDivider from "../Shared/GraphDivider";
 import StackedBarItem from "./StackedBarItem";
@@ -32,28 +32,12 @@ export interface IStackedBarProps {
 	readonly barHeight?: number;
 	/** default: "#EEEEEE" */
 	readonly barHolderColor?: ColorValue;
-	/** default: 12, 첫번째 바에는 적용되지 않음 */
-	readonly barDistance?: number;
 	/** default: true */
 	readonly barAnimated?: boolean;
-	/** default: 60 (ms) */
-	readonly barAnimateDelay?: number;
 	/** default: "rounded" */
 	readonly barLeftStyle?: "rounded" | "square";
 	/** default: "rounded" */
 	readonly barRightStyle?: "rounded" | "square";
-
-	/** default: true */
-	readonly showLabel?: boolean;
-	/** default: "top" */
-	readonly labelPosition?: "top" | "bottom";
-	/** default: `{ color: "#999999" }` */
-	readonly labelStlye?: StyleProp<TextStyle>;
-
-	/** default: true */
-	readonly showValue?: boolean;
-	/** default: "right" */
-	readonly valuePosition?: "left" | "right";
 
 	/** default: true */
 	readonly showDivider?: boolean;
@@ -72,6 +56,12 @@ export interface IStackedBarProps {
 	readonly percentFixed?: 0 | 1 | 2;
 	/** require Fixed `width` style */
 	readonly PercentLabelComponent?: PercentLabelComp | null | undefined;
+
+	/** default: true */
+	readonly showList?: boolean;
+	/** default: true */
+	readonly listAnimated?: boolean;
+	readonly listContainerStyle?: StyleProp<ViewStyle>;
 }
 
 export default function StackedBar(props: IStackedBarProps) {
@@ -99,17 +89,9 @@ export default function StackedBar(props: IStackedBarProps) {
 		return props.barHolderColor === undefined ? "#EEEEEE" : props.barHolderColor;
 	}, [props.barHolderColor]);
 
-	const barDistance = useMemo(() => {
-		return props.barDistance === undefined ? 12 : props.barDistance;
-	}, [props.barDistance]);
-
 	const barAnimated = useMemo(() => {
 		return props.barAnimated === undefined ? true : props.barAnimated;
 	}, [props.barAnimated]);
-
-	// const barAnimateDelay = useMemo(() => {
-	// 	return props.barAnimateDelay === undefined ? 60 : props.barAnimateDelay;
-	// }, [props.barAnimateDelay]);
 
 	const barLeftStyle = useMemo(() => {
 		return props.barLeftStyle === undefined ? "rounded" : props.barLeftStyle;
@@ -118,26 +100,6 @@ export default function StackedBar(props: IStackedBarProps) {
 	const barRightStyle = useMemo(() => {
 		return props.barRightStyle === undefined ? "rounded" : props.barRightStyle;
 	}, [props.barRightStyle]);
-
-	const showLabel = useMemo(() => {
-		return props.showLabel === undefined ? true : props.showLabel;
-	}, [props.showLabel]);
-
-	const labelPosition = useMemo(() => {
-		return props.labelPosition === undefined ? "top" : props.labelPosition;
-	}, [props.labelPosition]);
-
-	const labelStlye = useMemo(() => {
-		return props.labelStlye === undefined ? null : props.labelStlye;
-	}, [props.labelStlye]);
-
-	const showValue = useMemo(() => {
-		return props.showValue === undefined ? true : props.showValue;
-	}, [props.showValue]);
-
-	const valuePosition = useMemo(() => {
-		return props.valuePosition === undefined ? "right" : props.valuePosition;
-	}, [props.valuePosition]);
 
 	const showDivider = useMemo(() => {
 		return props.showDivider === undefined ? true : props.showDivider;
@@ -162,6 +124,14 @@ export default function StackedBar(props: IStackedBarProps) {
 	const percentFixed = useMemo(() => {
 		return props.percentFixed === undefined ? 0 : props.percentFixed;
 	}, [props.percentFixed]);
+
+	const showList = useMemo(() => {
+		return props.showList === undefined ? true : props.showList;
+	}, [props.showList]);
+
+	const listAnimated = useMemo(() => {
+		return props.listAnimated === undefined ? true : props.listAnimated;
+	}, [props.listAnimated]);
 
 	const [percentLblWidth, setPercentLblWidth] = useState<number>(0);
 	const [isLayoutFinished, setIsLayoutFinished] = useState<boolean>(false);
@@ -189,33 +159,91 @@ export default function StackedBar(props: IStackedBarProps) {
 	const [barWidth, setBarWidth] = useState(0);
 
 	const { PercentLabelComponent } = props;
-	const PercentLbl = ({ value, total }: { value: number; total: number }) => {
-		if (PercentLabelComponent === null || PercentLabelComponent === undefined) {
+	const PercentLbl = useCallback(
+		(lblProps: IPercentLabelCompProps) => {
+			if (PercentLabelComponent === null || PercentLabelComponent === undefined) {
+				return (
+					<PercentLabel
+						value={lblProps.value}
+						valueColor={undefined}
+						barHeight={barHeight}
+						totalCnt={lblProps.total}
+						percentFixed={percentFixed}
+						textAlign={props.percentPosition}
+						percentLblWidth={percentLblWidth}
+					/>
+				);
+			} else {
+				return <PercentLabelComponent {...lblProps} />;
+			}
+		},
+		[barHeight, percentFixed, props.percentPosition, percentLblWidth, PercentLabelComponent],
+	);
+
+	const [touchedIndex, setTouchedIndex] = useState<number>(-1);
+	const onTouching = useCallback((index: number, isTouched: boolean) => {
+		if (isTouched) {
+			setTouchedIndex(index);
+		} else {
+			setTouchedIndex(-1);
+		}
+	}, []);
+
+	const StackedItem = useCallback(
+		(item: IBarGraphData, index: number) => {
+			const barColor = item.color === undefined ? DEFAULT_COLORS[index % DEFAULT_COLORS.length] : item.color;
 			return (
-				<PercentLabel
-					value={value}
-					valueColor={undefined}
+				<StackedBarItem
+					key={item.label + "_" + index}
+					index={index}
+					value={item.value}
+					containerWidth={barWidth}
+					color={barColor}
+					totalCnt={props.totalCnt}
 					barHeight={barHeight}
-					totalCnt={total}
-					percentFixed={percentFixed}
-					textAlign={props.percentPosition}
-					percentLblWidth={percentLblWidth}
+					barAnimated={barAnimated}
+					barLeftStyle={barLeftStyle === "rounded" && index === 0 ? "rounded" : "square"}
+					barRightStyle={barRightStyle === "rounded" && index === props.graphData.length - 1 ? "rounded" : "square"}
+					isTouched={touchedIndex === index}
 				/>
 			);
-		} else {
-			return <PercentLabelComponent value={value} total={total} />;
-		}
-	};
+		},
+		[barWidth, props.totalCnt, barHeight, barAnimated, barLeftStyle, barRightStyle, touchedIndex],
+	);
+
+	const ListItem = useCallback(
+		(item: IBarGraphData, index: number) => {
+			const barColor = item.color === undefined ? DEFAULT_COLORS[index % DEFAULT_COLORS.length] : item.color;
+			return (
+				<StackedListItem
+					key={item.label + "_" + index}
+					index={index}
+					value={item.value}
+					label={item.label}
+					color={barColor}
+					totalCnt={props.totalCnt}
+					percentPosition={props.percentPosition}
+					percentFixed={percentFixed}
+					PercentLabelComponent={PercentLbl}
+					onTouching={onTouching}
+					listAnimated={listAnimated}
+				/>
+			);
+		},
+		[props.totalCnt, props.percentPosition, percentFixed, PercentLbl, onTouching, listAnimated],
+	);
 
 	const styles = getStyles(barHeight, barHolderColor);
 	return (
 		<View style={props.style}>
-			{isLayoutFinished && showTitle && titlePosition === "top" && <Text style={[styles.title, props.titleStyle]}>{props.title}</Text>}
+			{isLayoutFinished && showTitle && titlePosition === "top" && (
+				<Text style={[styles.title, props.titleStyle, { color: undefined }]}>{props.title}</Text>
+			)}
 			{isLayoutFinished ? (
-				<View>
+				<>
 					<View style={styles.flexRowVerticalCenter}>
 						{/* left percent label */}
-						{props.percentPosition === "left" && <PercentLbl value={sumOfValues} total={props.totalCnt} />}
+						{props.percentPosition === "left" && <PercentLbl value={sumOfValues} total={props.totalCnt} color={undefined} />}
 						<View
 							style={[
 								styles.barHolderStyle,
@@ -234,51 +262,14 @@ export default function StackedBar(props: IStackedBarProps) {
 									dividerWidth={dividerWidth}
 								/>
 							)}
-							{barWidth > 0 &&
-								props.graphData.map((item, index) => {
-									const barColor = item.color === undefined ? DEFAULT_COLORS[index % DEFAULT_COLORS.length] : item.color;
-									return (
-										<StackedBarItem
-											key={item.label + "_" + index}
-											index={index}
-											value={item.value}
-											containerWidth={barWidth}
-											color={barColor}
-											totalCnt={props.totalCnt}
-											barHeight={barHeight}
-											barAnimated={barAnimated}
-											barLeftStyle={barLeftStyle === "rounded" && index === 0 ? "rounded" : "square"}
-											barRightStyle={barRightStyle === "rounded" && index === props.graphData.length - 1 ? "rounded" : "square"}
-										/>
-									);
-								})}
+							{barWidth > 0 && props.graphData.map((item, index) => StackedItem(item, index))}
 						</View>
-						{props.percentPosition === "right" && <PercentLbl value={sumOfValues} total={props.totalCnt} />}
+						{props.percentPosition === "right" && <PercentLbl value={sumOfValues} total={props.totalCnt} color={undefined} />}
 					</View>
-					<View style={{}}>
-						{props.graphData.map((item, index) => {
-							const barColor = item.color === undefined ? DEFAULT_COLORS[index % DEFAULT_COLORS.length] : item.color;
-							return (
-								<StackedListItem
-									key={item.label + "_" + index}
-									index={index}
-									value={item.value}
-									label={item.label}
-									// containerWidth={barWidth}
-									color={barColor}
-									totalCnt={props.totalCnt}
-									// barHeight={barHeight}
-									percentFixed={percentFixed}
-									PercentLabelComponent={PercentLbl}
-									// barHeight={barHeight}
-									// barAnimated={barAnimated}
-									// barLeftStyle={barLeftStyle === "rounded" && index === 0 ? "rounded" : "square"}
-									// barRightStyle={barRightStyle === "rounded" && index === props.graphData.length - 1 ? "rounded" : "square"}
-								/>
-							);
-						})}
-					</View>
-				</View>
+					{showList && (
+						<View style={[{ marginTop: 16 }, props.listContainerStyle]}>{props.graphData.map((item, index) => ListItem(item, index))}</View>
+					)}
+				</>
 			) : (
 				<View
 					style={{ position: "absolute" }}
