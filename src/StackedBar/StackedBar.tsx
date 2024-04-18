@@ -226,6 +226,7 @@ export default function StackedBar(props: IStackedBarProps) {
 					percentFixed={percentFixed}
 					PercentLabelComponent={PercentLbl}
 					onTouching={onTouching}
+					onPress={item.onPress}
 					listAnimated={listAnimated}
 				/>
 			);
