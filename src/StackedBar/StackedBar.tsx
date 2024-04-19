@@ -1,6 +1,6 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
 import { ColorValue, DimensionValue, StyleProp, TextStyle, Text, View, StyleSheet, ViewStyle } from "react-native";
-import { IBarGraphData, IPercentLabelCompProps, PercentLabelComp } from "../horizontal-bar-graphs-types";
+import { IBarGraphData, IPercentLabelCompProps, PercentLabelComp, StackedCustomListItem } from "../horizontal-bar-graphs-types";
 import { DEFAULT_COLORS } from "../consts";
 import GraphDivider from "../Shared/GraphDivider";
 import StackedBarItem from "./StackedBarItem";
@@ -62,6 +62,9 @@ export interface IStackedBarProps {
 	/** default: true */
 	readonly listAnimated?: boolean;
 	readonly listContainerStyle?: StyleProp<ViewStyle>;
+	readonly ListItemComponent?: StackedCustomListItem | React.MemoExoticComponent<StackedCustomListItem> | null;
+	/** default: true */
+	readonly enableTouchHighlight?: boolean;
 }
 
 export default function StackedBar(props: IStackedBarProps) {
@@ -181,13 +184,18 @@ export default function StackedBar(props: IStackedBarProps) {
 	);
 
 	const [touchedIndex, setTouchedIndex] = useState<number>(-1);
-	const onTouching = useCallback((index: number, isTouched: boolean) => {
-		if (isTouched) {
-			setTouchedIndex(index);
-		} else {
-			setTouchedIndex(-1);
-		}
-	}, []);
+	const onTouching = useCallback(
+		(index: number, isTouched: boolean) => {
+			if (props.enableTouchHighlight !== false) {
+				if (isTouched) {
+					setTouchedIndex(index);
+				} else {
+					setTouchedIndex(-1);
+				}
+			}
+		},
+		[props.enableTouchHighlight],
+	);
 
 	const StackedItem = useCallback(
 		(item: IBarGraphData, index: number) => {
@@ -212,26 +220,42 @@ export default function StackedBar(props: IStackedBarProps) {
 	);
 
 	const ListItem = useCallback(
-		(item: IBarGraphData, index: number) => {
+		({ item, index }: { item: IBarGraphData; index: number }) => {
 			const barColor = item.color === undefined ? DEFAULT_COLORS[index % DEFAULT_COLORS.length] : item.color;
-			return (
-				<StackedListItem
-					key={item.label + "_" + index}
-					index={index}
-					value={item.value}
-					label={item.label}
-					color={barColor}
-					totalCnt={props.totalCnt}
-					percentPosition={props.percentPosition}
-					percentFixed={percentFixed}
-					PercentLabelComponent={PercentLbl}
-					onTouching={onTouching}
-					onPress={item.onPress}
-					listAnimated={listAnimated}
-				/>
-			);
+			if (props.ListItemComponent === undefined || props.ListItemComponent === null) {
+				return (
+					<StackedListItem
+						key={item.label + "_" + index}
+						index={index}
+						value={item.value}
+						label={item.label}
+						color={barColor}
+						totalCnt={props.totalCnt}
+						percentPosition={props.percentPosition}
+						percentFixed={percentFixed}
+						PercentLabelComponent={PercentLbl}
+						onTouching={onTouching}
+						onPress={item.onPress}
+						listAnimated={listAnimated}
+					/>
+				);
+			} else {
+				const { ListItemComponent } = props;
+				return (
+					<ListItemComponent
+						key={item.label + "_" + index}
+						index={index}
+						label={item.label}
+						value={item.value}
+						color={barColor}
+						totalCnt={props.totalCnt}
+						onTouching={onTouching}
+						PercentLabelComponent={PercentLbl}
+					/>
+				);
+			}
 		},
-		[props.totalCnt, props.percentPosition, percentFixed, PercentLbl, onTouching, listAnimated],
+		[props.totalCnt, props.percentPosition, percentFixed, PercentLbl, onTouching, listAnimated, props.ListItemComponent],
 	);
 
 	const styles = getStyles(barHeight, barHolderColor);
@@ -268,7 +292,11 @@ export default function StackedBar(props: IStackedBarProps) {
 						{props.percentPosition === "right" && <PercentLbl value={sumOfValues} total={props.totalCnt} color={undefined} />}
 					</View>
 					{showList && (
-						<View style={[{ marginTop: 16 }, props.listContainerStyle]}>{props.graphData.map((item, index) => ListItem(item, index))}</View>
+						<View style={[{ marginTop: 16 }, props.listContainerStyle]}>
+							{props.graphData.map((item, index) => (
+								<ListItem key={index} item={item} index={index} />
+							))}
+						</View>
 					)}
 				</>
 			) : (

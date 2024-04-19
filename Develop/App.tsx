@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useCallback, useState} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -6,9 +6,17 @@ import {
   Button,
   View,
   Text,
+  ScrollView,
+  TouchableOpacity,
 } from 'react-native';
 
-import {BarGraph, IBarGraphData, StackedBar} from './dist';
+import {
+  BarGraph,
+  IBarGraphData,
+  IStackedCustomListItemProps,
+  StackedBar,
+  StackedCustomListItem,
+} from './dist';
 
 const App = () => {
   const BAR_DATA: IBarGraphData[] = [
@@ -60,8 +68,39 @@ const App = () => {
   const [showBarGraph, setShowBarGraph] = useState(false);
   const [showStackedBarGraph, setShowStackedBarGraph] = useState(false);
 
+  const _ListItem = useCallback<StackedCustomListItem>(
+    (listProps: IStackedCustomListItemProps) => {
+      const {PercentLabelComponent} = listProps;
+      return (
+        <TouchableOpacity
+          onPressIn={() => listProps.onTouching(listProps.index, true)}
+          onPressOut={() => listProps.onTouching(listProps.index, false)}
+          // onPress={() => {
+          //   Alert.alert('ASDFADSFA', listProps.label);
+          // }}
+        >
+          <View key={listProps.index}>
+            {/* <Text>{listProps.color}</Text> */}
+            <Text>{listProps.index}</Text>
+            <Text>{listProps.label}</Text>
+            <Text>{listProps.totalCnt}</Text>
+            <Text>{listProps.value}</Text>
+            <PercentLabelComponent
+              value={listProps.value}
+              total={listProps.totalCnt}
+              color={listProps.color}
+            />
+          </View>
+        </TouchableOpacity>
+      );
+    },
+    [],
+  );
+  const ListItem = React.memo(_ListItem);
+
   return (
     <SafeAreaView style={styles.container}>
+      {/* <ScrollView> */}
       <Button
         title="Bar Graph"
         onPress={() => setShowBarGraph(prev => !prev)}
@@ -86,6 +125,7 @@ const App = () => {
         // valuePosition="left"
         // labelPosition="bottom"
         dividerWidth={1}
+        enableTouchHighlight
         // dividerHeight={'100%'}
         // dividerInterver={25}
         // barAnimateDelay={0}
@@ -128,6 +168,9 @@ const App = () => {
           dividerWidth={1}
           // showList={false}
           listAnimated={true}
+          // enableTouchHighlight={false}
+          // ListItemComponent={ListItem}
+          // ListItemComponent={_ListItem}
           // dividerHeight={'100%'}
           // dividerInterver={25}
           // barAnimateDelay={0}
@@ -146,6 +189,7 @@ const App = () => {
           // )}
         />
       )}
+      {/* </ScrollView> */}
     </SafeAreaView>
   );
 };

@@ -1,4 +1,4 @@
-import React, { useEffect, useLayoutEffect, useMemo, useRef } from "react";
+import React, { useLayoutEffect, useMemo, useRef } from "react";
 import { ColorValue, DimensionValue, StyleSheet, Animated, Easing } from "react-native";
 
 export interface IStackedBarItemProps {
@@ -8,7 +8,6 @@ export interface IStackedBarItemProps {
 	readonly containerWidth: number;
 
 	readonly color: ColorValue;
-	// readonly onPress: ((label: string, value: number, color: ColorValue) => void | Promise<void>) | undefined;
 	/** 전체 갯수(분모) */
 	readonly totalCnt: number;
 
@@ -21,7 +20,6 @@ export interface IStackedBarItemProps {
 }
 export default React.memo(_StackedBarItem);
 function _StackedBarItem(props: IStackedBarItemProps) {
-	// console.log("@@@", props.isTouched, props.index);
 	const valPercent = useMemo(() => {
 		return Math.round((props.value / props.totalCnt) * 100);
 	}, [props.value / props.totalCnt]);

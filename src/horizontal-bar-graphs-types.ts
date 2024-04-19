@@ -15,3 +15,14 @@ export interface IPercentLabelCompProps {
 }
 
 export type PercentLabelComp = (props: IPercentLabelCompProps) => ReactElement;
+
+export interface IStackedCustomListItemProps {
+	readonly label: string;
+	readonly value: number;
+	readonly color: ColorValue;
+	readonly index: number;
+	readonly totalCnt: number;
+	readonly onTouching: (index: number, isTouched: boolean) => void;
+	readonly PercentLabelComponent: PercentLabelComp;
+}
+export type StackedCustomListItem = (props: IStackedCustomListItemProps) => ReactElement;

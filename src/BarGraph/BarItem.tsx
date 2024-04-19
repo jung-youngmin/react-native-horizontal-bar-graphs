@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { Animated, ColorValue, DimensionValue, Easing, StyleProp, Text, TextStyle, TouchableOpacity, StyleSheet, View } from "react-native";
 import GraphDivider from "../Shared/GraphDivider";
 import PercentLabel from "../Shared/PercentLabel";
@@ -42,6 +42,8 @@ interface IBarItemProps {
 	readonly percentFixed: 0 | 1 | 2;
 	readonly percentLblWidth: number;
 	readonly PercentLabelComponent: PercentLabelComp | null | undefined;
+
+	readonly enableTouchHighlight: boolean;
 }
 
 export default function BarItem(props: IBarItemProps) {
@@ -93,8 +95,16 @@ export default function BarItem(props: IBarItemProps) {
 		}
 	};
 
-	const styles = getStyles(props.barHeight, props.barHolderColor, props.color);
+	const onTouching = useCallback(
+		(touched: boolean) => {
+			if (props.enableTouchHighlight) {
+				setIsTouched(touched);
+			}
+		},
+		[props.enableTouchHighlight],
+	);
 
+	const styles = getStyles(props.barHeight, props.barHolderColor, props.color);
 	return (
 		<View style={[{ marginTop: props.barDistance }]}>
 			{/* label */}
@@ -105,8 +115,8 @@ export default function BarItem(props: IBarItemProps) {
 			)}
 			<TouchableOpacity
 				activeOpacity={1}
-				onPressIn={() => setIsTouched(true)}
-				onPressOut={() => setIsTouched(false)}
+				onPressIn={() => onTouching(true)}
+				onPressOut={() => onTouching(false)}
 				onPress={() => {
 					if (props.onPress !== undefined) {
 						props.onPress(props.label, props.value, props.color);
@@ -127,7 +137,7 @@ export default function BarItem(props: IBarItemProps) {
 								leftPosition={props.barHeight / 2}
 								dividerInterver={props.dividerInterver}
 								dividerHeight={props.dividerHeight}
-								dividerColor={isTouched ? props.color : props.dividerColor}
+								dividerColor={props.dividerColor}
 								dividerWidth={props.dividerWidth}
 							/>
 						)}

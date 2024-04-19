@@ -69,6 +69,8 @@ export interface IBarGraphProps {
 	readonly percentFixed?: 0 | 1 | 2;
 	/** require Fixed `width` style */
 	readonly PercentLabelComponent?: PercentLabelComp | null | undefined;
+	/** default: true */
+	readonly enableTouchHighlight?: boolean;
 }
 
 export default function BarGraph(props: IBarGraphProps) {
@@ -160,6 +162,10 @@ export default function BarGraph(props: IBarGraphProps) {
 		return props.percentFixed === undefined ? 0 : props.percentFixed;
 	}, [props.percentFixed]);
 
+	const enableTouchHighlight = useMemo(() => {
+		return props.enableTouchHighlight === undefined ? true : props.enableTouchHighlight;
+	}, [props.enableTouchHighlight]);
+
 	const [percentLblWidth, setPercentLblWidth] = useState<number>(0);
 	const [isLayoutFinished, setIsLayoutFinished] = useState<boolean>(false);
 
@@ -219,6 +225,7 @@ export default function BarGraph(props: IBarGraphProps) {
 							percentFixed={percentFixed}
 							percentLblWidth={percentLblWidth}
 							PercentLabelComponent={props.PercentLabelComponent}
+							enableTouchHighlight={enableTouchHighlight}
 						/>
 					);
 				})
