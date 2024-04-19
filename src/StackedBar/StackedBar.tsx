@@ -1,61 +1,14 @@
 import React, { useCallback, useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { ColorValue, DimensionValue, StyleProp, TextStyle, Text, View, StyleSheet, ViewStyle } from "react-native";
-import { IBarGraphData, IPercentLabelCompProps, PercentLabelComp, StackedCustomListItem } from "../horizontal-bar-graphs-types";
+import { ColorValue, StyleProp, Text, View, StyleSheet, ViewStyle } from "react-native";
+import { IBarGraphData, IHorizontalBarGraphsBaseProps, IPercentLabelCompProps, StackedCustomListItem } from "../horizontal-bar-graphs-types";
 import { DEFAULT_COLORS } from "../consts";
 import GraphDivider from "../Shared/GraphDivider";
 import StackedBarItem from "./StackedBarItem";
 import PercentLabel from "../Shared/PercentLabel";
 import StackedListItem from "./StackedListItem";
 
-export interface IStackedBarProps {
-	readonly graphData: IBarGraphData[];
+export interface IStackedBarProps extends IHorizontalBarGraphsBaseProps {
 	readonly totalCnt: number;
-	readonly style?: StyleProp<ViewStyle>;
-
-	readonly title?: string;
-	/** default: "top" */
-	readonly titlePosition?: "top" | "bottom";
-	/**
-	 * default
-	 * ```
-	 * {
-	 * 	fontWeight: "bold",
-	 * 	fontSize: 20,
-	 * 	textAlign: "center",
-	 * 	marginVertical: 16,
-	 * }
-	 * ```
-	 */
-	readonly titleStyle?: StyleProp<TextStyle>;
-
-	/** default: 28 */
-	readonly barHeight?: number;
-	/** default: "#EEEEEE" */
-	readonly barHolderColor?: ColorValue;
-	/** default: true */
-	readonly barAnimated?: boolean;
-	/** default: "rounded" */
-	readonly barLeftStyle?: "rounded" | "square";
-	/** default: "rounded" */
-	readonly barRightStyle?: "rounded" | "square";
-
-	/** default: true */
-	readonly showDivider?: boolean;
-	/** default: 20 */
-	readonly dividerInterver?: 4 | 5 | 10 | 20 | 25 | 33.3 | 50;
-	/** default: "60%" */
-	readonly dividerHeight?: DimensionValue | undefined;
-	/** default: "#BBBBBB" */
-	readonly dividerColor?: ColorValue;
-	/** default: 1 */
-	readonly dividerWidth?: number;
-
-	/** default: "right" */
-	readonly percentPosition?: "left" | "right" | undefined;
-	/** default: 0 */
-	readonly percentFixed?: 0 | 1 | 2;
-	/** require Fixed `width` style */
-	readonly PercentLabelComponent?: PercentLabelComp | null | undefined;
 
 	/** default: true */
 	readonly showList?: boolean;
@@ -63,8 +16,6 @@ export interface IStackedBarProps {
 	readonly listAnimated?: boolean;
 	readonly listContainerStyle?: StyleProp<ViewStyle>;
 	readonly ListItemComponent?: StackedCustomListItem | React.MemoExoticComponent<StackedCustomListItem> | null;
-	/** default: true */
-	readonly enableTouchHighlight?: boolean;
 }
 
 export default function StackedBar(props: IStackedBarProps) {

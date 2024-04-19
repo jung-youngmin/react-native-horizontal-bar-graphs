@@ -1,44 +1,15 @@
 import React, { useEffect, useLayoutEffect, useMemo, useState } from "react";
-import { ColorValue, DimensionValue, StyleProp, TextStyle, Text, View, StyleSheet, ViewStyle } from "react-native";
+import { StyleProp, TextStyle, Text, View, StyleSheet } from "react-native";
 import BarItem from "./BarItem";
 import PercentLabel from "../Shared/PercentLabel";
-import { IBarGraphData, PercentLabelComp } from "../horizontal-bar-graphs-types";
+import { IHorizontalBarGraphsBaseProps } from "../horizontal-bar-graphs-types";
 import { DEFAULT_COLORS } from "../consts";
 
-export interface IBarGraphProps {
-	readonly graphData: IBarGraphData[];
-	readonly style?: StyleProp<ViewStyle>;
-
-	readonly title?: string;
-	/** default: "top" */
-	readonly titlePosition?: "top" | "bottom";
-	/**
-	 * default
-	 * ```
-	 * {
-	 * 	fontWeight: "bold",
-	 * 	fontSize: 20,
-	 * 	textAlign: "center",
-	 * 	marginVertical: 16,
-	 * }
-	 * ```
-	 */
-	readonly titleStyle?: StyleProp<TextStyle>;
-
-	/** default: 28 */
-	readonly barHeight?: number;
-	/** default: "#EEEEEE" */
-	readonly barHolderColor?: ColorValue;
+export interface IBarGraphProps extends IHorizontalBarGraphsBaseProps {
 	/** default: 12, 첫번째 바에는 적용되지 않음 */
 	readonly barDistance?: number;
-	/** default: true */
-	readonly barAnimated?: boolean;
 	/** default: 60 (ms) */
 	readonly barAnimateDelay?: number;
-	/** default: "rounded" */
-	readonly barLeftStyle?: "rounded" | "square";
-	/** default: "rounded" */
-	readonly barRightStyle?: "rounded" | "square";
 
 	/** default: true */
 	readonly showLabel?: boolean;
@@ -51,26 +22,6 @@ export interface IBarGraphProps {
 	readonly showValue?: boolean;
 	/** default: "right" */
 	readonly valuePosition?: "left" | "right";
-
-	/** default: true */
-	readonly showDivider?: boolean;
-	/** default: 20 */
-	readonly dividerInterver?: 4 | 5 | 10 | 20 | 25 | 33.3 | 50;
-	/** default: "60%" */
-	readonly dividerHeight?: DimensionValue | undefined;
-	/** default: "#BBBBBB" */
-	readonly dividerColor?: ColorValue;
-	/** default: 1 */
-	readonly dividerWidth?: number;
-
-	/** default: "right" */
-	readonly percentPosition?: "left" | "right" | undefined;
-	/** default: 0 */
-	readonly percentFixed?: 0 | 1 | 2;
-	/** require Fixed `width` style */
-	readonly PercentLabelComponent?: PercentLabelComp | null | undefined;
-	/** default: true */
-	readonly enableTouchHighlight?: boolean;
 }
 
 export default function BarGraph(props: IBarGraphProps) {
