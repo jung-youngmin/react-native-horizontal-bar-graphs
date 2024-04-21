@@ -147,8 +147,7 @@ Shares many items with props from `BarGraph`
 
 | prop | Required | Type | Default | Description |
 | --- | --- | --- | --- | --- |
-| graphData | O | IBarGraphData |  | Data to be rendered
-https://www.notion.so/README-md-2d83031931c74d96a6cbc41668607491?pvs=21 |
+| graphData | O | IBarGraphData |  | Data to be rendered |
 | totalCnt | O | number |  | Total number of data
 Used as denominator when calculating percentages
 데이터의 전체 갯수
@@ -195,8 +194,7 @@ NOTE: BarGraph.PercentLabelComponent의 color는 undefined가 아닙니다 |
 | showList | X | boolean  | true | Whether to render a list of graphData |
 | listAnimated | X | boolean  | true | Whether to run animations when the list is displayed |
 | listContainerStyle | X | StyleProp<ViewStyle> |  | Style of list container |
-| ListItemComponent | X | (props: IStackedCustomListItemProps) => ReactElement |  | A React Component that renders custom list items.
-https://www.notion.so/README-md-2d83031931c74d96a6cbc41668607491?pvs=21 |
+| ListItemComponent | X | (props: IStackedCustomListItemProps) => ReactElement |  | A React Component that renders custom list items. |
 
 # Demo
 ## barLeftStyle, barRightStyle, barHolderRightStyle
@@ -335,7 +333,7 @@ export interface IStackedCustomListItemProps {
 
 ***onTouching***
 
-If you want to use the same color highlight effect as when using `[enableTouchHighlight](https://www.notion.so/README-md-2d83031931c74d96a6cbc41668607491?pvs=21)`,
+If you want to use the same color highlight effect as when using [enableTouchHighlight](),
 
 implement `onPressIn()` and `onPressOut()` of your TouchableComponents (such as `TouchableOpacity` or `TouchableHighlight`) using `props.onTouching()` as follows:
 
