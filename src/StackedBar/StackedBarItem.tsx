@@ -35,7 +35,7 @@ function _StackedBarItem(props: IStackedBarItemProps) {
 		Animated.timing(animWidth, {
 			toValue: w,
 			duration: 1000,
-			delay: 20 * (props.index + 1),
+			delay: 100 + 20 * (props.index + 1),
 			useNativeDriver: false,
 			isInteraction: true,
 			easing: Easing.out(Easing.exp),

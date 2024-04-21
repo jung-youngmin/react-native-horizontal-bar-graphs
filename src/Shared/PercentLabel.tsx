@@ -7,8 +7,7 @@ interface IPercentLabelProps {
 	readonly totalCnt: number;
 	readonly barHeight: number;
 	readonly percentFixed: 0 | 1 | 2;
-	readonly textAlign: "left" | "right" | undefined;
-	readonly percentLblWidth: number;
+	readonly textAlign: "left" | "right" | "none";
 }
 
 export default function PercentLabel(props: IPercentLabelProps) {
@@ -41,15 +40,22 @@ export default function PercentLabel(props: IPercentLabelProps) {
 		}
 	}, [props.textAlign]);
 
+	const percentWidth = useMemo(() => {
+		const calcWidth = Math.round(
+			(props.barHeight / 2) * 1.3 * 2 * 0.85 + (props.barHeight / 2) * props.percentFixed * 0.7 + (props.barHeight / 2) * 0.65 * 2 + 4,
+		);
+		return calcWidth;
+	}, [props.barHeight, props.percentFixed]);
+
 	return (
 		<View
 			style={[
 				{
 					flexDirection: "row",
 					alignItems: "baseline",
+					width: percentWidth,
 				},
 				textAlign,
-				props.percentLblWidth > 0 && { width: props.percentLblWidth },
 			]}>
 			<Text
 				allowFontScaling={false}

@@ -6,9 +6,9 @@ export const DEFAULT_COLORS: ColorValue[] = [
 	"crimson",
 	"darkcyan",
 	"dodgerblue",
+	"orangered",
 	"forestgreen",
 	"goldenrod",
-	"orangered",
 	"yellowgreen",
 	"darkviolet",
 ];

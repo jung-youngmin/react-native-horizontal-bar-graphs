@@ -6,7 +6,7 @@ export interface IStackedListItemProps extends IBarGraphData {
 	readonly color: ColorValue;
 	readonly index: number;
 	readonly totalCnt: number;
-	readonly percentPosition: "left" | "right" | undefined;
+	readonly percentPosition: "left" | "right" | "none" | undefined;
 	readonly percentFixed: 0 | 1 | 2;
 	/** require Fixed `width` style */
 	readonly PercentLabelComponent: PercentLabelComp;

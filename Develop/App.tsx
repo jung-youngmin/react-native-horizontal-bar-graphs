@@ -1,4 +1,4 @@
-import React, {useCallback, useState} from 'react';
+import React, {useCallback, useMemo, useState} from 'react';
 import {
   StyleSheet,
   SafeAreaView,
@@ -19,76 +19,106 @@ import {
 } from './dist';
 
 const App = () => {
-  const BAR_DATA: IBarGraphData[] = [
-    {
-      value: 10,
-      label: 'Label 0',
-      onPress: (label, value, color) => {
-        Alert.alert(label, value + '__' + color.toString());
+  const BAR_DATA: IBarGraphData[] = useMemo(() => {
+    return [
+      {
+        value: 30,
+        label: 'Label 0',
+        onPress: (label, value, color) => {
+          Alert.alert(label, value + '__' + color.toString());
+        },
       },
-    },
-    {
-      value: 9,
-      label: 'Label 1',
-    },
-    {
-      value: 16,
-      label: 'Label 2',
-    },
-    {
-      value: 12,
-      label: 'Label 3',
-    },
-    {
-      value: 7,
-      label: 'Label 4',
-    },
-    {
-      value: 1,
-      label: 'Label 5',
-    },
-    {
-      value: 4,
-      label: 'Label 6',
-    },
-    {
-      value: 7,
-      label: 'Label 7',
-    },
-    {
-      value: 0,
-      label: 'Label 8',
-    },
-    {
-      value: 44,
-      label: 'Label 9',
-    },
-  ];
+      {
+        value: 10,
+        label: 'Label 1',
+      },
+      {
+        value: 15,
+        label: 'Label 2',
+      },
+      {
+        value: 16,
+        label: 'Label 3',
+      },
+      {
+        value: 24,
+        label: 'Label 4',
+      },
+      {
+        value: 18,
+        label: 'Label 5',
+      },
+      {
+        value: 12,
+        label: 'Label 6',
+      },
+      {
+        value: 8,
+        label: 'Label 7',
+      },
+      {
+        value: 45,
+        label: 'Label 8',
+      },
+      {
+        value: 36,
+        label: 'Label 9',
+      },
+    ];
+  }, []);
+
+  const dataTotalCnt = useMemo(() => {
+    let total = 0;
+    BAR_DATA.forEach(item => {
+      total += item.value;
+    });
+    return total;
+  }, [BAR_DATA]);
 
   const [showBarGraph, setShowBarGraph] = useState(false);
   const [showStackedBarGraph, setShowStackedBarGraph] = useState(false);
 
   const _ListItem = useCallback<StackedCustomListItem>(
     (listProps: IStackedCustomListItemProps) => {
-      const {PercentLabelComponent} = listProps;
+      const {
+        onTouching,
+        index,
+        label,
+        totalCnt,
+        value,
+        color,
+        PercentLabelComponent,
+      } = listProps;
       return (
         <TouchableOpacity
-          onPressIn={() => listProps.onTouching(listProps.index, true)}
-          onPressOut={() => listProps.onTouching(listProps.index, false)}
-          // onPress={() => {
-          //   Alert.alert('ASDFADSFA', listProps.label);
-          // }}
-        >
-          <View key={listProps.index}>
-            {/* <Text>{listProps.color}</Text> */}
-            <Text>{listProps.index}</Text>
-            <Text>{listProps.label}</Text>
-            <Text>{listProps.totalCnt}</Text>
-            <Text>{listProps.value}</Text>
+          // To use `TouchHighlight`, implement `onPressIn` and `onPressOut` as follows:
+          onPressIn={() => onTouching(index, true)}
+          onPressOut={() => onTouching(index, false)}
+          onPress={() => {}}>
+          <View
+            style={{
+              marginVertical: 8,
+              flexDirection: 'row',
+              alignItems: 'baseline',
+              justifyContent: 'space-between',
+            }}>
+            <Text style={{fontSize: 18, fontWeight: 'bold', color: color}}>
+              {label}
+            </Text>
+            <View
+              style={{
+                width: 70,
+                flexDirection: 'row',
+                alignItems: 'baseline',
+                justifyContent: 'flex-end',
+              }}>
+              <Text style={{fontSize: 16, fontWeight: 'bold'}}>{value}</Text>
+              <Text style={{fontSize: 12}}>{' / ' + totalCnt}</Text>
+            </View>
             <PercentLabelComponent
-              value={listProps.value}
-              total={listProps.totalCnt}
-              color={listProps.color}
+              value={value}
+              total={totalCnt}
+              color={color}
             />
           </View>
         </TouchableOpacity>
@@ -100,96 +130,106 @@ const App = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      {/* <ScrollView> */}
-      <Button
-        title="Bar Graph"
-        onPress={() => setShowBarGraph(prev => !prev)}
-      />
-      <BarGraph
-        graphData={BAR_DATA}
-        style={[
-          styles.graphContainer,
-          {display: showBarGraph ? 'flex' : 'none'},
-        ]}
-        // totalCnt={10 + 9 + 16 + 12 + 7 + 1 + 4 + 7 + 0 + 44}
-        // percentPosition="left"
-        percentPosition="right"
-        percentFixed={1}
-        // barLeftStyle="square"
-        // barRightStyle="square"
-        title="TITLE"
-        titlePosition="top"
-        valuePosition="right"
-        // labelPosition="bottom"
-        barAnimated={true}
-        // valuePosition="left"
-        // labelPosition="bottom"
-        dividerWidth={1}
-        enableTouchHighlight
-        // dividerHeight={'100%'}
-        // dividerInterver={25}
-        // barAnimateDelay={0}
-        // PercentLabelComponent={({value, total}) => {
-        //   return (
-        //     <Text style={{borderWidth: 1, width: 70}}>
-        //       {value + ', ' + total}
-        //     </Text>
-        //   );
-        // }}
-        // barHeight={40}
-      />
-      <Button
-        title="Stacked Bar Graph"
-        onPress={() => setShowStackedBarGraph(prev => !prev)}
-      />
-      {showStackedBarGraph && (
-        <StackedBar
-          graphData={BAR_DATA}
-          totalCnt={139}
-          // barHeight={40}
-          style={[
-            styles.graphContainer,
-            // {display: showStackedBarGraph ? 'flex' : 'none'},
-          ]}
-          // totalCnt={10 + 9 + 16 + 12 + 7 + 1 + 4 + 7 + 0 + 44}
-          // barHeight={32}
-          // percentPosition="left"
-          percentPosition="right"
-          percentFixed={2}
-          dividerInterver={20}
-          // barLeftStyle="square"
-          // barRightStyle="square"
-          title="TITLE"
-          titlePosition="top"
-          // labelPosition="bottom"
-          barAnimated={true}
-          // valuePosition="left"
-          // labelPosition="bottom"
-          dividerWidth={1}
-          // showList={false}
-          listAnimated={true}
-          // enableTouchHighlight={false}
-          // ListItemComponent={ListItem}
-          // ListItemComponent={_ListItem}
-          // dividerHeight={'100%'}
-          // dividerInterver={25}
-          // barAnimateDelay={0}
-          // PercentLabelComponent={({value, total}) => {
-          //   return (
-          //     <Text style={{borderWidth: 1, width: 70}}>
-          //       {value + ', ' + total}
-          //     </Text>
-          //   );
-          // }}
-
-          // PercentLabelComponent={lblProps => (
-          //   <View style={{width: 40}}>
-          //     <Text>{lblProps.value}</Text>
-          //   </View>
-          // )}
+      <ScrollView>
+        <Button
+          title="Bar Graph"
+          onPress={() => setShowBarGraph(prev => !prev)}
         />
-      )}
-      {/* </ScrollView> */}
+        {showBarGraph && (
+          <BarGraph
+            graphData={BAR_DATA}
+            style={[styles.graphContainer]}
+            // title="Bar Graph Title"
+            // titlePosition="bottom"
+            // titleStyle={{marginTop: 32}}
+            // barHeight={20}
+            // barHolderColor={'#DDDDDD'}
+            // barAnimated={true}
+            // barLeftStyle="square"
+            // barRightStyle="rounded"
+            // barHolderRightStyle="rounded"
+            // showDivider={true}
+            // dividerInterver={25}
+            // dividerHeight={'50%'}
+            // dividerColor={'#FFFFFF'}
+            // dividerWidth={1}
+            // percentPosition="right"
+            // percentFixed={2}
+            // PercentLabelComponent={({value, total, color}) => {
+            //   return (
+            //     <Text
+            //       style={{
+            //         width: 70,
+            //         fontSize: 16,
+            //         textAlign: 'right',
+            //         fontWeight: 'bold',
+            //         color: color,
+            //         fontStyle: 'italic',
+            //         textDecorationLine: 'underline',
+            //       }}>
+            //       {((value / total) * 100).toFixed(1) + '%'}
+            //     </Text>
+            //   );
+            // }}
+            // enableTouchHighlight
+            // barDistance={24}
+            // barAnimateDelay={50}
+            // showLabel={true}
+            // labelPosition="bottom"
+            // labelStlye={{fontSize: 20}}
+            // showValue={true}
+            // valuePosition="left"
+          />
+        )}
+        <Button
+          title="Stacked Bar Graph"
+          onPress={() => setShowStackedBarGraph(prev => !prev)}
+        />
+        {showStackedBarGraph && (
+          <StackedBar
+            graphData={BAR_DATA}
+            totalCnt={dataTotalCnt + 30}
+            style={styles.graphContainer}
+            title="This is Title"
+            // titlePosition="top"
+            // titleStyle={{borderWidth: 1}}
+            // barHeight={24}
+            // barHolderColor={'#DDDDDD'}
+            // barAnimated={true}
+            // barLeftStyle="square"
+            // barRightStyle="rounded"
+            // barHolderRightStyle="rounded"
+            // showDivider={true}
+            // dividerInterver={25}
+            // dividerHeight={'90%'}
+            // dividerColor={'gray'}
+            // dividerWidth={1}
+            // percentPosition="right"
+            // percentFixed={1}
+            // PercentLabelComponent={({value, total, color}) => {
+            //   return (
+            //     <Text
+            //       style={{
+            //         width: 70,
+            //         fontSize: 16,
+            //         textAlign: 'right',
+            //         fontWeight: 'bold',
+            //         color: color,
+            //         fontStyle: 'italic',
+            //         textDecorationLine: 'underline',
+            //       }}>
+            //       {((value / total) * 100).toFixed(1) + '%'}
+            //     </Text>
+            //   );
+            // }}
+            // enableTouchHighlight={true}
+            // showList={false}
+            // listAnimated={true}
+            listContainerStyle={{marginTop: 16}}
+            // ListItemComponent={ListItem}
+          />
+        )}
+      </ScrollView>
     </SafeAreaView>
   );
 };
