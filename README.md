@@ -1,4 +1,3 @@
-# WIP: It is not completed. (21-APR-2024)
 # Index
 1. [react-native-horizontal-bar-graphs](#react-native-horizontal-bar-graphs)
 2. [Installation](#installation)
@@ -46,8 +45,15 @@ Information about each data is displayed as a list at the bottom of the bar.
 You should pass **2 required props.**
 
 # Installation
+No dependencies. Just install it
+``` bash
+npm install react-native-horizontal-bar-graphs
+```
 
-WIP...
+or if you use yarn
+``` bash
+yarn add react-native-horizontal-bar-graphs
+```
 
 # How to use
 ```tsx
