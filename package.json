@@ -1,6 +1,6 @@
 {
 	"name": "react-native-horizontal-bar-graphs",
-	"version": "0.0.1",
+	"version": "0.1.0",
 	"description": "react-native horizontal bar graphs",
 	"main": "dist/index.js",
 	"types": "dist/index.d.ts",
