@@ -156,32 +156,66 @@ only 1 required prop
 
 # Demo
 ## barLeftStyle, barRightStyle, barHolderRightStyle
+
 ***Rounded - Default***
-| BarGraph - Rounded - Default | Required |
-| -- | -- |
+| BarGraph | StackedBar |
+| :--: | :--: |
 | ![bar_percent_default](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/43945c20-e5e6-4a6b-9461-cf9aa68e24e1) | ![stacked_rrr](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/a4d97266-e53a-49a2-9249-06b5c825dd67) |
-| <pre lang="tsx"><BarGraph<br>    graphData={BAR_DATA}<br>    barLeftStyle="rounded"<br>    barRightStyle="rounded"<br>    barHolderRightStyle="rounded"<br>    // ...other props<br>/></pre> | <pre lang="tsx"><StackedBar<br>    graphData={BAR_DATA}<br>    barLeftStyle="rounded"<br>    barRightStyle="rounded"<br>    barHolderRightStyle="rounded"<br>    // ...other props<br>/></pre> |
+``` tsx
+<BarGraph // same as StackedBar
+  graphData={BAR_DATA}
+  barLeftStyle="rounded"
+  barRightStyle="rounded"
+  barHolderRightStyle="rounded"
+  // other props...
+/>
+```
 
 <br>
 
 ***Square***
-| ![bar_sss](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/4dceed33-460a-4cff-841a-2d025f2bec3e) | ![stack_sss](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/0a19eb59-c282-4f63-88fd-83813463d65a) | 
-| -- | -- |
-| <pre lang="tsx"><BarGraph<br>    graphData={BAR_DATA}<br>    barLeftStyle="square"<br>    barRightStyle="square"<br>    barHolderRightStyle="square"<br>    // ...other props<br>/></pre> | <pre lang="tsx"><StackedBar<br>    graphData={BAR_DATA}<br>    barLeftStyle="square"<br>    barRightStyle="square"<br>    barHolderRightStyle="square"<br>    // ...other props<br>/></pre> |
-
+| BarGraph | StackedBar |
+| :--: | :--: |
+| ![bar_sss](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/4dceed33-460a-4cff-841a-2d025f2bec3e) | ![stack_sss](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/0a19eb59-c282-4f63-88fd-83813463d65a) |
+``` tsx
+<BarGraph // same as StackedBar
+  graphData={BAR_DATA}
+  barLeftStyle="square"
+  barRightStyle="square"
+  barHolderRightStyle="square"
+  // other props...
+/>
+```
 <br>
 
 ***Mixed style 1***
+| BarGraph | StackedBar |
+| :--: | :--: |
 |![bar_rsr](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/da2b2f93-f434-41ea-918e-302dde8d875f) | ![stack_rsr](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/71858464-e050-4b70-ad96-acf6a6b375ac) |
-| -- | -- |
-| <pre lang="tsx"><BarGraph<br>    graphData={BAR_DATA}<br>    barLeftStyle="rounded"<br>    barRightStyle="square"<br>    barHolderRightStyle="rounded""<br>    // ...other props<br>/></pre> | <pre lang="tsx"><StackedBar<br>    graphData={BAR_DATA}<br>    barLeftStyle="rounded"<br>    barRightStyle="square"<br>    barHolderRightStyle="rounded""<br>    // ...other props<br>/></pre> |
-
+``` tsx
+<BarGraph // same as StackedBar
+  graphData={BAR_DATA}
+  barLeftStyle="rounded"
+  barRightStyle="square"
+  barHolderRightStyle="rounded"
+  // other props...
+/>
+```
 <br>
 
 ***Mixed style 2***
+| BarGraph | StackedBar |
+| :--: | :--: |
 | ![bar_srr](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/d33e7293-5395-47c1-8d0f-d9ae743aeb0c) | ![stack_srr](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/6c9ef94b-379b-44da-9e4d-233823302538) |
-| -- | -- |
-| <pre lang="tsx"><BarGraph<br>    graphData={BAR_DATA}<br>    barLeftStyle="square"<br>    barRightStyle="rounded"<br>    barHolderRightStyle="rounded""<br>    // ...other props<br>/></pre> | <pre lang="tsx"><StackedBar<br>    graphData={BAR_DATA}<br>    barLeftStyle="square"<br>    barRightStyle="rounded"<br>    barHolderRightStyle="rounded""<br>    // ...other props<br>/></pre> |
+``` tsx
+<BarGraph // same as StackedBar
+  graphData={BAR_DATA}
+  barLeftStyle="square"
+  barRightStyle="rounded"
+  barHolderRightStyle="rounded"
+  // other props...
+/>
+```
 
 ## PercentLabelComponent
 recommend to use `fixed width styles`.  
