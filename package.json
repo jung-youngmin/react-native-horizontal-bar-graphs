@@ -40,7 +40,10 @@
 	"keywords": [
 		"react-native",
 		"chart",
-		"graph"
+		"graph",
+		"bar graph",
+		"horizontal graph",
+		"horizontal bar graph"
 	],
 	"author": "Jung-YoungMin <duddud311@gmail.com>",
 	"license": "MIT",
