@@ -114,87 +114,45 @@ only 1 required prop
 | showValue | X | `boolean` | `true` | Whether to show the value above the bar |
 | valuePosition | X | `"left" \| "right"` | `"right"` | Position on the bar where the value is rendered |
 | showDivider | X | `boolean` | `true` | Whether to display a divider at certain percentages in the bar's placeholder |
-| dividerInterver | X | `4 \| 5 \| 10 \| 20 \| 25 \| 33.3 \| 50` | `20` | A number for what percentage of intervals the dividing lines are rendered.<br>e.g.) If set to `20`, dividers will be rendered at `20%`, `40%`, `60%`, and `80%`.<br>divider가 몇%마다 표시될지 |
+| dividerInterver | X | `4 \| 5 \| 10 \| 20 \| 25 \| 33.3 \| 50` | `20` | A number for what percentage of intervals the dividing lines are rendered.<br>*e.g.* If set to `20`, dividers will be rendered at `20%`, `40%`, `60%`, and `80%`.<br>divider가 몇%마다 표시될지 |
 | dividerHeight | X | `string \| number` | `"60%"` | Height of divider<br>When set to "100%", it is equal to the height of the bar |
-| dividerColor | X | ColorValue | "#BBBBBB" | Color of divider |
-| dividerWidth | X | number | 1 | Width of each divider |
-| percentPosition | X | "left" | "right" | "none” | "right" | Position where the percentage corresponding to value is displayed.
-NOTE: If undefined or "none", it is not rendered. |
-| percentFixed | X | 0 | 1 | 2 | 0 | A number representing the decimal place of a percentage to be rendered.
-e.g.1) Rendered to 50% when set to 0
-e.g.2) Rendered to 50.0% when set to 1
-e.g.3) Rendered to 50.00% when set to 2
-NOTE: this prop is ignored when PercentLabelComponent is passed
-
-퍼센트의 소수점 몇번째 자리까지 표시할지 |
-| PercentLabelComponent | X | ({ value, total, color }: { value: number; total: number, color: ColorValue | undefined }) => ReactElement | null | undefined | undefined | A React Component to display percentages.
-value, total and color count are provided to calculate percentage.
-NOTE: It is recommended to use fixed width styles
-NOTE: color may be passed undefined.
-Only the PercentLabelComponent that will be rendered on the right or left sides of the StackedBar has an undefined color.
-NOTE: The color of BarGraph.PercentLabelComponent is not undefined
-
-NOTE: color는 undefined로 전달될 수 있습니다.
-StackedBar의 오른쪽이나 왼쪽에 렌더될 PercentLabelComponent만 color가 undefined입니다.
-NOTE: BarGraph.PercentLabelComponent의 color는 undefined가 아닙니다 |
-| enableTouchHighlight | X | boolean | true | Whether to enable color highlighting when a bar or list item is touched. |
+| dividerColor | X | `ColorValue` | `"#BBBBBB"` | Color of divider |
+| dividerWidth | X | `number` | `1` | Width of each divider |
+| percentPosition | X | `"left" \| "right" \| "none"` | `"right"` | Position where the percentage corresponding to value is displayed.<br>**NOTE:** If it is `undefined` or `"none"`, it is not rendered. |
+| percentFixed | X | `0 \| 1 \| 2` | `0` | A number representing the decimal place of a percentage to be rendered.<br>*e.g.1* Rendered to `50%` when set to `0`<br>*e.g.2* Rendered to `50.0%` when set to `1`<br>*e.g.3* Rendered to `50.00%` when set to `2`<br>**NOTE:** this prop is ignored when `PercentLabelComponent` is passed<br>퍼센트의 소수점 몇번째 자리까지 표시할지 |
+| PercentLabelComponent | X | `({ value, total, color }: { value: number; total: number, color: ColorValue \| undefined }) => ReactElement \| null \| undefined` | | A React Component to display percentages.<br>`value`, `total` and `color` are provided to calculate percentage.<br>**NOTE:** It is recommended to **use fixed width** styles<br>**NOTE:** color may be passed `undefined`. Only the `PercentLabelComponent` that will be rendered on the right or left sides of the `StackedBar` has an `undefined` color.<br>**NOTE:** The color of `BarGraph.PercentLabelComponent` is **not** `undefined`<br>**NOTE:** color는 `undefined`로 전달될 수 있습니다. `StackedBar의` 오른쪽이나 왼쪽에 렌더될 `PercentLabelComponent만` color가 `undefined`입니다.<br>**NOTE:** `BarGraph.PercentLabelComponent`의 color는 `undefined`**가 아닙니다** |
+| enableTouchHighlight | X | `boolean` | `true` | Whether to enable color highlighting when a bar or list item is touched. |
 
 ## StackedBar
-
-2 required props
-
-Shares many items with props from `BarGraph`
+2 required props. Shares many items with props from `BarGraph`
 
 | prop | Required | Type | Default | Description |
-| --- | --- | --- | --- | --- |
-| graphData | O | IBarGraphData |  | Data to be rendered |
-| totalCnt | O | number |  | Total number of data
-Used as denominator when calculating percentages
-데이터의 전체 갯수
-퍼센트를 계산할 때 분모로 사용됨 |
-| style | X | StyleProp<ViewStyle> |  | Styles for graph containers |
-| title | X | string |  | Title of graph
-NOTE: If title is undefined or an empty string (""), it will not be rendered. |
-| titlePosition | X | "top" | "bottom" | "top" | Position of the title |
-| titleStyle | X | StyleProp<TextStyle> | {fontWeight: "bold", fontSize: 20, textAlign: "center", marginVertical: 16} | Styles for title |
-| barHeight | X | number | 28 | Height of each bar |
-| barHolderColor | X | ColorValue | "#EEEEEE" | Placeholder color for bars |
-| barAnimated | X | boolean | true | Whether to animate the bar |
-| barLeftStyle | X | "rounded" | "square" | "rounded" | Left style of bar (both colored and holder) |
-| barRightStyle | X | "rounded" | "square" | "rounded" | Right style of colored bar |
-| barHolderRightStyle | X | "rounded" | "square" | "rounded" | Right style of placeholder of bar |
-| showDivider | X | boolean | true | Whether to display a divider at certain percentages in the bar's placeholder |
-| dividerInterver | X | 4 | 5 | 10 | 20 | 25 | 33.3 | 50 | 20 | A number for what percentage of intervals the dividing lines are rendered
-e.g.) If set to 20, dividers will be rendered at 20%, 40%, 60%, and 80%.
-divider가 몇%마다 표시될지 |
-| dividerHeight | X | DimensionValue | "60%" | Height of divider
-When set to "100%", it is equal to the height of the bar |
-| dividerColor | X | ColorValue | "#BBBBBB" | Color of divider |
-| dividerWidth | X | number | 1 | Width of each divider |
-| percentPosition | X | "left" | "right" | undefined | "right" | Position where the percentage corresponding to value is displayed.
-If undefined or "none", it is not rendered. |
-| percentFixed | X | 0 | 1 | 2 | 0 | A number representing the decimal place of a percentage to be rendered.
-e.g.1) Rendered to 50% when set to 0
-e.g.2) Rendered to 50.0% when set to 1
-e.g.3) Rendered to 50.00% when set to 2
-NOTE: this prop is ignored when PercentLabelComponent is passed
-
-퍼센트의 소수점 몇번째 자리까지 표시할지 |
-| PercentLabelComponent | X | ({ value, total, color }: { value: number; total: number, color: ColorValue | undefined }) => ReactElement | null | undefined | undefined | A React Component to display percentages.
-value, total and color count are provided to calculate percentage.
-NOTE: It is recommended to use fixed width styles
-NOTE: color may be passed undefined.
-Only the PercentLabelComponent that will be rendered on the right and left sides of the StackedBar has an undefined color.
-NOTE: The color of BarGraph.PercentLabelComponent is not undefined
-
-NOTE: color는 undefined로 전달될 수 있습니다.
-StackedBar의 오른쪽이나 왼쪽에 렌더될 PercentLabelComponent만 color가 undefined입니다.
-NOTE: BarGraph.PercentLabelComponent의 color는 undefined가 아닙니다 |
-| enableTouchHighlight | X | boolean | true | Whether to enable color highlighting when a bar or list item is touched. |
-| showList | X | boolean  | true | Whether to render a list of graphData |
-| listAnimated | X | boolean  | true | Whether to run animations when the list is displayed |
-| listContainerStyle | X | StyleProp<ViewStyle> |  | Style of list container |
-| ListItemComponent | X | (props: IStackedCustomListItemProps) => ReactElement |  | A React Component that renders custom list items. |
+| ---- | :-------:| ---- | ------- | ----------- |
+| graphData | O | `IBarGraphData` |  | Data to be rendered<br>[details](#ibargraphdata) |
+| totalCnt | O | `number` |  | Total number of data.<br>Used as denominator when calculating percentages.<br>데이터의 전체 갯수.<br>퍼센트를 계산할 때 분모로 사용됨. |
+| style | X | `StyleProp<ViewStyle>` |  | Styles for graph containers |
+| title | X | `string` |  | Title of graph<br>**NOTE:** If title is `undefined` or an empty string (`""`), it will not be rendered. |
+| titlePosition | X | `"top" \| "bottom"` | `"top"` | Position of the title |
+| titleStyle | X | `StyleProp<TextStyle>` | `{fontWeight: "bold", fontSize: 20, textAlign: "center", marginVertical: 16}` | Styles for title |
+| barHeight | X | `number` | `28` | Height of each bar |
+| barHolderColor | X | `ColorValue` | `"#EEEEEE"` | Placeholder color for bars |
+| barAnimated | X | `boolean` | `true` | Whether to animate the bar |
+| barLeftStyle | X | `"rounded" \| "square"` | `"rounded"` | Left style of bar (both colored and holder) |
+| barRightStyle | X | `"rounded" \| "square"` | `"rounded"` | Right style of colored bar |
+| barHolderRightStyle | X | `"rounded" \| "square"` | `"rounded"` | Right style of placeholder of bar |
+| showDivider | X | `boolean` | `true` | Whether to display a divider at certain percentages in the bar's placeholder |
+| dividerInterver | X | `4 \| 5 \| 10 \| 20 \| 25 \| 33.3 \| 50` | `20` | A number for what percentage of intervals the dividing lines are rendered<br>*e.g.* If set to `20`, dividers will be rendered at `20%`, `40%`, `60%`, and `80%`.<br>divider가 몇%마다 표시될지 |
+| dividerHeight | X | `string \| number` | `"60%"` | Height of divider<br>When set to "100%", it is equal to the height of the bar |
+| dividerColor | X | `ColorValue` | `"#BBBBBB"` | Color of divider |
+| dividerWidth | X | `number` | `1` | Width of each divider |
+| percentPosition | X | `"left" \| "right" \| "none"` | `"right"` | Position where the percentage corresponding to value is displayed.<br>**NOTE:** If it is `undefined` or `"none"`, it is not rendered. |
+| percentFixed | X | `0 \| 1 \| 2` | `0` | A number representing the decimal place of a percentage to be rendered.<br>*e.g.1* Rendered to `50%` when set to `0`<br>*e.g.2* Rendered to `50.0%` when set to `1`<br>*e.g.3* Rendered to `50.00%` when set to `2`<br>**NOTE:** this prop is ignored when `PercentLabelComponent` is passed<br>퍼센트의 소수점 몇번째 자리까지 표시할지 |
+| PercentLabelComponent | X | `({ value, total, color }: { value: number; total: number, color: ColorValue \| undefined }) => ReactElement \| null \| undefined` | | A React Component to display percentages.<br>`value`, `total` and `color` are provided to calculate percentage.<br>**NOTE:** It is recommended to **use fixed width** styles<br>**NOTE:** color may be passed `undefined`. Only the `PercentLabelComponent` that will be rendered on the right or left sides of the `StackedBar` has an `undefined` color.<br>**NOTE:** The color of `BarGraph.PercentLabelComponent` is **not** `undefined`<br>**NOTE:** color는 `undefined`로 전달될 수 있습니다. `StackedBar의` 오른쪽이나 왼쪽에 렌더될 `PercentLabelComponent만` color가 `undefined`입니다.<br>**NOTE:** `BarGraph.PercentLabelComponent`의 color는 `undefined`**가 아닙니다** |
+| enableTouchHighlight | X | `boolean` | `true` | Whether to enable color highlighting when a bar or list item is touched. |
+| showList | X | `boolean` | `true` | Whether to render a list of `graphData` |
+| listAnimated | X | `boolean` | `true` | Whether to run animations when the list is displayed |
+| listContainerStyle | X | `StyleProp<ViewStyle>` |  | Style of list container |
+| ListItemComponent | X | `(props: IStackedCustomListItemProps) => ReactElement` |  | A React Component that renders custom list items.<br>[ListItemComponent (StackedBar Only)](#listitemcomponent-stackedbar-only) |
 
 # Demo
 ## barLeftStyle, barRightStyle, barHolderRightStyle
