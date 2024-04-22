@@ -1,4 +1,12 @@
 # WIP: It is not completed. (21-APR-2024)
+# Index
+1. [react-native-horizontal-bar-graphs](#react-native-horizontal-bar-graphs)
+2. [Installation](#installation)
+3. [How to use](#how-to-use)
+4. [Props](#props)
+5. [Demo](#demo)
+6. [License](#license)
+
 # react-native-horizontal-bar-graphs
 
 `react-native-horizontal-bar-graphs` allows you to easily draw horizontal bar graphs.  
@@ -42,7 +50,6 @@ You should pass **2 required props.**
 WIP...
 
 # How to use
-
 ```tsx
 import {BarGraph, IBarGraphData, StackedBar} from 'react-native-horizontal-bar-graphs';
 
@@ -102,7 +109,7 @@ only 1 required prop
 | titleStyle | X | `StyleProp<TextStyle>` | `{fontWeight: "bold", fontSize: 20, textAlign: "center", marginVertical: 16}` | Styles for title |
 | barHeight | X | `number` | `28` | Height of each bar |
 | barHolderColor | X | `ColorValue` | `"#EEEEEE"` | Placeholder color for bars |
-| barDistance | X | `number` | `12` | Distance between bars<br>**NOTE:** excluding the first bar |
+| barDistance | X | `number` | `12` | Distance between bars<br>**NOTE:** excluding the first bar<br>[barDistance (BarGraph only)](#bardistance-bargraph-only) |
 | barAnimated | X | `boolean` | `true` | Whether to animate the bar |
 | barAnimateDelay | X | `number` | `60` | Delay time (ms) at which the animation of the bars begins<br>막대들의 애니메이션이 시작되는 지연 시간 (ms) |
 | barLeftStyle | X | `"rounded" \| "square"` | `"rounded"` | Left style of bar (both colored and holder).<br>[barLeftStyle](#barleftstyle-barrightstyle-barholderrightstyle) |
@@ -112,7 +119,7 @@ only 1 required prop
 | labelPosition | X | `"top" \| "bottom"` | `"top"` | Position of each label relative to the bar<br>막대를 기준으로 각 label의 포지션 |
 | labelStlye | X | `StyleProp<TextStyle>` | `{ color: "#999999", fontSize: barHeight / 2 }` | Styles for label<br>**NOTE:** By default fontSize is set to `barHeight/2`.<br>**NOTE:** When you touch the bar, the text color is highlighted in the same color as the bar. If you don't want it, set `enableTouchHighlight` to `false`. |
 | showValue | X | `boolean` | `true` | Whether to show the value above the bar |
-| valuePosition | X | `"left" \| "right"` | `"right"` | Position on the bar where the value is rendered |
+| valuePosition | X | `"left" \| "right"` | `"right"` | Position on the bar where the value is rendered<br>[valuePosition (BarGraph only)](#valueposition-bargraph-only) |
 | showDivider | X | `boolean` | `true` | Whether to display a divider at certain percentages in the bar's placeholder |
 | dividerInterver | X | `4 \| 5 \| 10 \| 20 \| 25 \| 33.3 \| 50` | `20` | A number for what percentage of intervals the dividing lines are rendered.<br>*e.g.* If set to `20`, dividers will be rendered at `20%`, `40%`, `60%`, and `80%`.<br>divider가 몇%마다 표시될지 |
 | dividerHeight | X | `string \| number` | `"60%"` | Height of divider<br>When set to "100%", it is equal to the height of the bar |
@@ -121,7 +128,7 @@ only 1 required prop
 | percentPosition | X | `"left" \| "right" \| "none"` | `"right"` | Position where the percentage corresponding to value is displayed.<br>**NOTE:** If it is `undefined` or `"none"`, it is not rendered. |
 | percentFixed | X | `0 \| 1 \| 2` | `0` | A number representing the decimal place of a percentage to be rendered.<br>*e.g.1* Rendered to `50%` when set to `0`<br>*e.g.2* Rendered to `50.0%` when set to `1`<br>*e.g.3* Rendered to `50.00%` when set to `2`<br>**NOTE:** this prop is ignored when `PercentLabelComponent` is passed<br>퍼센트의 소수점 몇번째 자리까지 표시할지 |
 | PercentLabelComponent | X | `({ value, total, color }: { value: number; total: number, color: ColorValue \| undefined }) => ReactElement \| null \| undefined` | | A React Component to display percentages.<br>[PercentLabelComponent](#percentlabelcomponent) |
-| enableTouchHighlight | X | `boolean` | `true` | Whether to enable color highlighting when a bar or list item is touched. |
+| enableTouchHighlight | X | `boolean` | `true` | Whether to enable color highlighting when a bar or list item is touched.<br>[enableTouchHighlight](#enabletouchhighlight) |
 
 ## StackedBar
 2 required props. Shares many items with props from `BarGraph`
@@ -148,7 +155,7 @@ only 1 required prop
 | percentPosition | X | `"left" \| "right" \| "none"` | `"right"` | Position where the percentage corresponding to value is displayed.<br>**NOTE:** If it is `undefined` or `"none"`, it is not rendered. |
 | percentFixed | X | `0 \| 1 \| 2` | `0` | A number representing the decimal place of a percentage to be rendered.<br>*e.g.1* Rendered to `50%` when set to `0`<br>*e.g.2* Rendered to `50.0%` when set to `1`<br>*e.g.3* Rendered to `50.00%` when set to `2`<br>**NOTE:** this prop is ignored when `PercentLabelComponent` is passed<br>퍼센트의 소수점 몇번째 자리까지 표시할지 |
 | PercentLabelComponent | X | `({ value, total, color }: { value: number; total: number, color: ColorValue \| undefined }) => ReactElement \| null \| undefined` | | A React Component to display percentages.<br>[PercentLabelComponent](#percentlabelcomponent) |
-| enableTouchHighlight | X | `boolean` | `true` | Whether to enable color highlighting when a bar or list item is touched. |
+| enableTouchHighlight | X | `boolean` | `true` | Whether to enable color highlighting when a bar or list item is touched.<br>[enableTouchHighlight](#enabletouchhighlight) |
 | showList | X | `boolean` | `true` | Whether to render a list of `graphData` |
 | listAnimated | X | `boolean` | `true` | Whether to run animations when the list is displayed |
 | listContainerStyle | X | `StyleProp<ViewStyle>` |  | Style of list container |
@@ -225,12 +232,13 @@ recommend to use `fixed width styles`.
 > **NOTE:** color는 `undefined`로 전달될 수 있습니다. `StackedBar의` 오른쪽이나 왼쪽에 렌더될 `PercentLabelComponent`만 color가 `undefined`입니다.  
 > **NOTE:** `BarGraph.PercentLabelComponent`의 color는 `undefined`**가 아닙니다**
 
-| ![bar_percent_default](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/43945c20-e5e6-4a6b-9461-cf9aa68e24e1) | ![bar_percent_custom](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/d58de523-a297-4163-aa9e-a5c66358ba19) |
-| -- | -- |
-![stack_percent_custom](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/7955f6da-f84f-4e60-8274-0600aa4ee95f)
-![stack_percent_default](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/b8a05d95-8cf6-4ae7-8970-95dfc0617d6e)
+| BarGraph | StackedBar |
+| :--: | :--: |
+| *default*<br>![bar_percent_default](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/43945c20-e5e6-4a6b-9461-cf9aa68e24e1) | *default*<br>![stack_percent_default](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/b8a05d95-8cf6-4ae7-8970-95dfc0617d6e) |
+| *custom*<br>![bar_percent_custom](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/d58de523-a297-4163-aa9e-a5c66358ba19) | *custom*<br>![stack_percent_custom](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/7955f6da-f84f-4e60-8274-0600aa4ee95f)
+
 ```tsx
-<BarGraph
+<BarGraph // same as StackedBar
   graphData={BAR_DATA}
   style={[styles.graphContainer]}
   PercentLabelComponent={({value, total, color}) => {
@@ -250,74 +258,52 @@ recommend to use `fixed width styles`.
     );
   }}
 />
-
-<StackedBar
-  graphData={BAR_DATA}
-  totalCnt={TOTAL_CNT}
-  style={styles.graphContainer}
-  PercentLabelComponent={({value, total, color}) => {
-    return (
-      <Text
-        style={{
-          width: 70,
-          fontSize: 16,
-          textAlign: 'right',
-          fontWeight: 'bold',
-          color: color,
-          fontStyle: 'italic',
-          textDecorationLine: 'underline',
-        }}>
-        {((value / total) * 100).toFixed(1) + '%'}
-      </Text>
-    );
-  }}
-/>
 ```
 
 ## enableTouchHighlight
-If you don't want this effect, set `enableTouchHighlight` to `false`.  
-default is `true`
+If you don't want this effect, set `enableTouchHighlight` to `false`. (default is `true`)
 
-![bar_highlight](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/92d05060-47d1-4ce4-9e25-3a3389dda806)
-![stack_highlight](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/13804cd0-01fc-494f-8432-ade7bb2bf777)
+| BarGraph | StackedBar |
+| :--: | :--: |
+| ![bar_highlight](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/92d05060-47d1-4ce4-9e25-3a3389dda806) | ![stack_highlight](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/13804cd0-01fc-494f-8432-ade7bb2bf777) |
 
 
 ## barDistance (BarGraph only)
-![bar_distance](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/f69747ec-9445-4fdb-b6fb-becec7247b0c)
-![bar_distance_24](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/59d6fe5f-f108-4437-b1c2-4c28b023303c)
+| Default | barDistance={24} |
+| :--: | :--: |
+| ![bar_distance](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/f69747ec-9445-4fdb-b6fb-becec7247b0c) | ![bar_distance_24](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/59d6fe5f-f108-4437-b1c2-4c28b023303c) |
 ```tsx
 <BarGraph
   graphData={BAR_DATA}
-  style={[styles.graphContainer]}
   barDistance={24} // default : 12
-  // ...other props
+  // other props...
 />
 ```
 
 ## valuePosition (BarGraph only)
-![bar_val_left](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/7a4015d6-b221-4c30-9a39-9fad55450862)
-![bar_val_right](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/7e2572cc-2f7e-4d43-970b-a3914db1d34f)
+| Default | valuePosition="left" |
+| :--: | :--: |
+| ![bar_val_right](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/7e2572cc-2f7e-4d43-970b-a3914db1d34f) | ![bar_val_left](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/7a4015d6-b221-4c30-9a39-9fad55450862) |
 ```tsx
 <BarGraph
   graphData={BAR_DATA}
   style={[styles.graphContainer]}
   valuePosition="left" // default: "right"
-  // ...other props
+  // other props...
 />
 ```
 
 ## ListItemComponent (StackedBar Only)
+If you want to use your own custom list items, use this `ListItemComponent`.  
+For performance, I **strongly recommend** wrapping your custom component with **`React.memo()`**
+| Default | Custom ListItem | Custom ListItem |
+| :--: | :--: | :--: |
+| ![stack_list_dd](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/b4c152fc-5399-4a84-a282-91e5419c7504) | ![stack_list_cd](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/07d5198e-03ff-4745-9210-f17bc849f6ba) | ![stack_list_cc](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/8b5a3db7-5b02-40a7-bc85-bbeb5dca0534) |
+| *defalut PercentLabelComponent* | *defalut PercentLabelComponent* | *custom PercentLabelComponent* |
 
-If you want to use your own custom list items, use this `ListItemComponent`.
-> For performance reasons, I strongly recommend wrapping your custom component with `React.memo()`
-> 
-![stack_list_dd](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/b4c152fc-5399-4a84-a282-91e5419c7504)
-![stack_list_cd](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/07d5198e-03ff-4745-9210-f17bc849f6ba)
-![stack_list_cc](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/8b5a3db7-5b02-40a7-bc85-bbeb5dca0534)
-
+<br>
 
 The following `props` of `ListItemComponent` are passed:
-
 ```tsx
 export interface IStackedCustomListItemProps {
 	readonly label: string;
@@ -329,13 +315,11 @@ export interface IStackedCustomListItemProps {
 	readonly PercentLabelComponent: PercentLabelComp;
 }
 ```
+<br>
 
-***onTouching***
-
-If you want to use the same color highlight effect as when using [enableTouchHighlight](),
-
+***onTouching***  
+If you want to use the same color highlight effect as when using [enableTouchHighlight](),  
 implement `onPressIn()` and `onPressOut()` of your TouchableComponents (such as `TouchableOpacity` or `TouchableHighlight`) using `props.onTouching()` as follows:
-
 ```tsx
 <TouchableOpacity
 	// To use `TouchHighlight`, implement `onPressIn` and `onPressOut` as follows:
@@ -345,19 +329,18 @@ implement `onPressIn()` and `onPressOut()` of your TouchableComponents (such as 
 	{...}
 </TouchableOpacity>
 ```
+<br>
 
-***PercentLabelComponent***
+***PercentLabelComponent***  
+If you passed your `PercentLabelComponent` as the props of `StackedBar`,  
+the same(your) `PercentLabelComponent` will be passed as the props of `ListItemComponent`.
 
-If you passed your `PercentLabelComponent` as the props of `StackedBar`,
-
-the same `PercentLabelComponent` will be passed as the props of `ListItemComponent`.
-
-If you did **NOT** pass a `PercentLabelComponent` as the props of `StackedBar`,
-
+If you did **NOT** pass a `PercentLabelComponent` as the props of `StackedBar`,  
 the default `PercentLabelComponent` will be passed as the props of `ListItemComponent`.
 
-***Full sample code of using `ListItemComponent`***
+<br>
 
+***Full sample code of using `ListItemComponent`***
 ```tsx
 const _ListItem = useCallback<StackedCustomListItem>(
   (listProps: IStackedCustomListItemProps) => {
@@ -408,7 +391,7 @@ const _ListItem = useCallback<StackedCustomListItem>(
   [],
 );
 
-// For performance reasons,
+// For performance,
 // I strongly recommend wrapping your custom component with React.memo()
 const ListItem = React.memo(_ListItem);
 
