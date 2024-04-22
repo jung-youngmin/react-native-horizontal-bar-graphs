@@ -105,9 +105,9 @@ only 1 required prop
 | barDistance | X | `number` | `12` | Distance between bars<br>**NOTE:** excluding the first bar |
 | barAnimated | X | `boolean` | `true` | Whether to animate the bar |
 | barAnimateDelay | X | `number` | `60` | Delay time (ms) at which the animation of the bars begins<br>막대들의 애니메이션이 시작되는 지연 시간 (ms) |
-| barLeftStyle | X | `"rounded" \| "square"` | `"rounded"` | Left style of bar (both colored and holder) |
-| barRightStyle | X | `"rounded" \| "square"` | `"rounded"` | Right style of colored bar |
-| barHolderRightStyle | X | `"rounded" \| "square"` | `"rounded"` | Right style of placeholder of bar |
+| barLeftStyle | X | `"rounded" \| "square"` | `"rounded"` | Left style of bar (both colored and holder).<br>[barLeftStyle](#barleftstyle-barrightstyle-barholderrightstyle) |
+| barRightStyle | X | `"rounded" \| "square"` | `"rounded"` | Right style of colored bar.<br>[barRightStyle](#barleftstyle-barrightstyle-barholderrightstyle) |
+| barHolderRightStyle | X | `"rounded" \| "square"` | `"rounded"` | Right style of placeholder of bar.<br>[barHolderRightStyle](#barleftstyle-barrightstyle-barholderrightstyle) |
 | showLabel | X | `boolean` | `true` | Whether to show each label of graphData |
 | labelPosition | X | `"top" \| "bottom"` | `"top"` | Position of each label relative to the bar<br>막대를 기준으로 각 label의 포지션 |
 | labelStlye | X | `StyleProp<TextStyle>` | `{ color: "#999999", fontSize: barHeight / 2 }` | Styles for label<br>**NOTE:** By default fontSize is set to `barHeight/2`.<br>**NOTE:** When you touch the bar, the text color is highlighted in the same color as the bar. If you don't want it, set `enableTouchHighlight` to `false`. |
@@ -120,7 +120,7 @@ only 1 required prop
 | dividerWidth | X | `number` | `1` | Width of each divider |
 | percentPosition | X | `"left" \| "right" \| "none"` | `"right"` | Position where the percentage corresponding to value is displayed.<br>**NOTE:** If it is `undefined` or `"none"`, it is not rendered. |
 | percentFixed | X | `0 \| 1 \| 2` | `0` | A number representing the decimal place of a percentage to be rendered.<br>*e.g.1* Rendered to `50%` when set to `0`<br>*e.g.2* Rendered to `50.0%` when set to `1`<br>*e.g.3* Rendered to `50.00%` when set to `2`<br>**NOTE:** this prop is ignored when `PercentLabelComponent` is passed<br>퍼센트의 소수점 몇번째 자리까지 표시할지 |
-| PercentLabelComponent | X | `({ value, total, color }: { value: number; total: number, color: ColorValue \| undefined }) => ReactElement \| null \| undefined` | | A React Component to display percentages.<br>`value`, `total` and `color` are provided to calculate percentage.<br>**NOTE:** It is recommended to **use fixed width** styles<br>**NOTE:** color may be passed `undefined`. Only the `PercentLabelComponent` that will be rendered on the right or left sides of the `StackedBar` has an `undefined` color.<br>**NOTE:** The color of `BarGraph.PercentLabelComponent` is **not** `undefined`<br>**NOTE:** color는 `undefined`로 전달될 수 있습니다. `StackedBar의` 오른쪽이나 왼쪽에 렌더될 `PercentLabelComponent만` color가 `undefined`입니다.<br>**NOTE:** `BarGraph.PercentLabelComponent`의 color는 `undefined`**가 아닙니다** |
+| PercentLabelComponent | X | `({ value, total, color }: { value: number; total: number, color: ColorValue \| undefined }) => ReactElement \| null \| undefined` | | A React Component to display percentages.<br>[PercentLabelComponent](#percentlabelcomponent) |
 | enableTouchHighlight | X | `boolean` | `true` | Whether to enable color highlighting when a bar or list item is touched. |
 
 ## StackedBar
@@ -137,9 +137,9 @@ only 1 required prop
 | barHeight | X | `number` | `28` | Height of each bar |
 | barHolderColor | X | `ColorValue` | `"#EEEEEE"` | Placeholder color for bars |
 | barAnimated | X | `boolean` | `true` | Whether to animate the bar |
-| barLeftStyle | X | `"rounded" \| "square"` | `"rounded"` | Left style of bar (both colored and holder) |
-| barRightStyle | X | `"rounded" \| "square"` | `"rounded"` | Right style of colored bar |
-| barHolderRightStyle | X | `"rounded" \| "square"` | `"rounded"` | Right style of placeholder of bar |
+| barLeftStyle | X | `"rounded" \| "square"` | `"rounded"` | Left style of bar (both colored and holder).<br>[barLeftStyle](#barleftstyle-barrightstyle-barholderrightstyle) |
+| barRightStyle | X | `"rounded" \| "square"` | `"rounded"` | Right style of colored bar.<br>[barRightStyle](#barleftstyle-barrightstyle-barholderrightstyle) |
+| barHolderRightStyle | X | `"rounded" \| "square"` | `"rounded"` | Right style of placeholder of bar.<br>[barHolderRightStyle](#barleftstyle-barrightstyle-barholderrightstyle) |
 | showDivider | X | `boolean` | `true` | Whether to display a divider at certain percentages in the bar's placeholder |
 | dividerInterver | X | `4 \| 5 \| 10 \| 20 \| 25 \| 33.3 \| 50` | `20` | A number for what percentage of intervals the dividing lines are rendered<br>*e.g.* If set to `20`, dividers will be rendered at `20%`, `40%`, `60%`, and `80%`.<br>divider가 몇%마다 표시될지 |
 | dividerHeight | X | `string \| number` | `"60%"` | Height of divider<br>When set to "100%", it is equal to the height of the bar |
@@ -147,7 +147,7 @@ only 1 required prop
 | dividerWidth | X | `number` | `1` | Width of each divider |
 | percentPosition | X | `"left" \| "right" \| "none"` | `"right"` | Position where the percentage corresponding to value is displayed.<br>**NOTE:** If it is `undefined` or `"none"`, it is not rendered. |
 | percentFixed | X | `0 \| 1 \| 2` | `0` | A number representing the decimal place of a percentage to be rendered.<br>*e.g.1* Rendered to `50%` when set to `0`<br>*e.g.2* Rendered to `50.0%` when set to `1`<br>*e.g.3* Rendered to `50.00%` when set to `2`<br>**NOTE:** this prop is ignored when `PercentLabelComponent` is passed<br>퍼센트의 소수점 몇번째 자리까지 표시할지 |
-| PercentLabelComponent | X | `({ value, total, color }: { value: number; total: number, color: ColorValue \| undefined }) => ReactElement \| null \| undefined` | | A React Component to display percentages.<br>`value`, `total` and `color` are provided to calculate percentage.<br>**NOTE:** It is recommended to **use fixed width** styles<br>**NOTE:** color may be passed `undefined`. Only the `PercentLabelComponent` that will be rendered on the right or left sides of the `StackedBar` has an `undefined` color.<br>**NOTE:** The color of `BarGraph.PercentLabelComponent` is **not** `undefined`<br>**NOTE:** color는 `undefined`로 전달될 수 있습니다. `StackedBar의` 오른쪽이나 왼쪽에 렌더될 `PercentLabelComponent만` color가 `undefined`입니다.<br>**NOTE:** `BarGraph.PercentLabelComponent`의 color는 `undefined`**가 아닙니다** |
+| PercentLabelComponent | X | `({ value, total, color }: { value: number; total: number, color: ColorValue \| undefined }) => ReactElement \| null \| undefined` | | A React Component to display percentages.<br>[PercentLabelComponent](#percentlabelcomponent) |
 | enableTouchHighlight | X | `boolean` | `true` | Whether to enable color highlighting when a bar or list item is touched. |
 | showList | X | `boolean` | `true` | Whether to render a list of `graphData` |
 | listAnimated | X | `boolean` | `true` | Whether to run animations when the list is displayed |
@@ -156,36 +156,43 @@ only 1 required prop
 
 # Demo
 ## barLeftStyle, barRightStyle, barHolderRightStyle
-![bar_sss](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/4dceed33-460a-4cff-841a-2d025f2bec3e)
-![stack_sss](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/0a19eb59-c282-4f63-88fd-83813463d65a)
-```tsx
-barLeftStyle="square"
-barRightStyle="square"
-barHolderRightStyle="square"
-```
+***Rounded - Default***
+| BarGraph - Rounded - Default | Required |
+| -- | -- |
+| ![bar_percent_default](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/43945c20-e5e6-4a6b-9461-cf9aa68e24e1) | ![stacked_rrr](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/a4d97266-e53a-49a2-9249-06b5c825dd67) |
+| <pre lang="tsx"><BarGraph<br>    graphData={BAR_DATA}<br>    barLeftStyle="rounded"<br>    barRightStyle="rounded"<br>    barHolderRightStyle="rounded"<br>    // ...other props<br>/></pre> | <pre lang="tsx"><StackedBar<br>    graphData={BAR_DATA}<br>    barLeftStyle="rounded"<br>    barRightStyle="rounded"<br>    barHolderRightStyle="rounded"<br>    // ...other props<br>/></pre> |
 
-![bar_rsr](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/da2b2f93-f434-41ea-918e-302dde8d875f)
-![stack_rsr](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/71858464-e050-4b70-ad96-acf6a6b375ac)
-```tsx
-barLeftStyle="rounded"
-barRightStyle="square"
-barHolderRightStyle="rounded"
-```
+<br>
 
-![bar_srr](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/d33e7293-5395-47c1-8d0f-d9ae743aeb0c)
-![stack_srr](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/6c9ef94b-379b-44da-9e4d-233823302538)
-```tsx
-barLeftStyle="square"
-barRightStyle="rounded"
-barHolderRightStyle="rounded"
-```
+***Square***
+| ![bar_sss](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/4dceed33-460a-4cff-841a-2d025f2bec3e) | ![stack_sss](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/0a19eb59-c282-4f63-88fd-83813463d65a) | 
+| -- | -- |
+| <pre lang="tsx"><BarGraph<br>    graphData={BAR_DATA}<br>    barLeftStyle="square"<br>    barRightStyle="square"<br>    barHolderRightStyle="square"<br>    // ...other props<br>/></pre> | <pre lang="tsx"><StackedBar<br>    graphData={BAR_DATA}<br>    barLeftStyle="square"<br>    barRightStyle="square"<br>    barHolderRightStyle="square"<br>    // ...other props<br>/></pre> |
+
+<br>
+
+***Mixed style 1***
+|![bar_rsr](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/da2b2f93-f434-41ea-918e-302dde8d875f) | ![stack_rsr](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/71858464-e050-4b70-ad96-acf6a6b375ac) |
+| -- | -- |
+| <pre lang="tsx"><BarGraph<br>    graphData={BAR_DATA}<br>    barLeftStyle="rounded"<br>    barRightStyle="square"<br>    barHolderRightStyle="rounded""<br>    // ...other props<br>/></pre> | <pre lang="tsx"><StackedBar<br>    graphData={BAR_DATA}<br>    barLeftStyle="rounded"<br>    barRightStyle="square"<br>    barHolderRightStyle="rounded""<br>    // ...other props<br>/></pre> |
+
+<br>
+
+***Mixed style 2***
+| ![bar_srr](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/d33e7293-5395-47c1-8d0f-d9ae743aeb0c) | ![stack_srr](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/6c9ef94b-379b-44da-9e4d-233823302538) |
+| -- | -- |
+| <pre lang="tsx"><BarGraph<br>    graphData={BAR_DATA}<br>    barLeftStyle="square"<br>    barRightStyle="rounded"<br>    barHolderRightStyle="rounded""<br>    // ...other props<br>/></pre> | <pre lang="tsx"><StackedBar<br>    graphData={BAR_DATA}<br>    barLeftStyle="square"<br>    barRightStyle="rounded"<br>    barHolderRightStyle="rounded""<br>    // ...other props<br>/></pre> |
 
 ## PercentLabelComponent
-recommend to use `fixed width styles`
+recommend to use `fixed width styles`.  
+`value`, `total` and `color` are provided to calculate percentage.  
+**NOTE:** color may be passed `undefined`. Only the `PercentLabelComponent` that will be rendered on the right or left sides of the `StackedBar` has an `undefined` color.  
+**NOTE:** The color of `BarGraph.PercentLabelComponent` is **not** `undefined`  
+> **NOTE:** color는 `undefined`로 전달될 수 있습니다. `StackedBar의` 오른쪽이나 왼쪽에 렌더될 `PercentLabelComponent`만 color가 `undefined`입니다.  
+> **NOTE:** `BarGraph.PercentLabelComponent`의 color는 `undefined`**가 아닙니다**
 
-![bar_percent_default](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/43945c20-e5e6-4a6b-9461-cf9aa68e24e1)
-![bar_percent_custom](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/d58de523-a297-4163-aa9e-a5c66358ba19)
-
+| ![bar_percent_default](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/43945c20-e5e6-4a6b-9461-cf9aa68e24e1) | ![bar_percent_custom](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/d58de523-a297-4163-aa9e-a5c66358ba19) |
+| -- | -- |
 ![stack_percent_custom](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/7955f6da-f84f-4e60-8274-0600aa4ee95f)
 ![stack_percent_default](https://github.com/jung-youngmin/react-native-horizontal-bar-graphs/assets/166787291/b8a05d95-8cf6-4ae7-8970-95dfc0617d6e)
 ```tsx
