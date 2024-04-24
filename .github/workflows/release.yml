@@ -40,6 +40,9 @@ jobs:
           git tag ${{ github.ref_name }} -f
           git push origin ${{ github.ref_name }} -f
 
+      - name: tsc
+        uses: icrawl/action-tsc@v1
+
       - run: npm publish
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
