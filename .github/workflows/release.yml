@@ -15,22 +15,22 @@ jobs:
     steps:
       - name: Get semantic version
         id: semver
-        run: echo "::set-output name=version::${GITHUB_REF#refs/tags/v}"
+        run: echo "version=${GITHUB_REF#refs/tags/v}" >>$GITHUB_OUTPUT
 
       - uses: actions/checkout@v4
         with:
           ref: v${{ steps.semver.outputs.version }}
 
-      - uses: actions/setup-node@v3.6.0
+      - uses: actions/setup-node@v4
         with:
-          node-version: '20.3.0'
+          node-version: '21.7.1'
           registry-url: 'https://registry.npmjs.org'
 
       - name: Update package version
         run: npm version ${{ steps.semver.outputs.version }} --no-git-tag-version
 
       - name: Commit updated package version
-        uses: stefanzweifel/git-auto-commit-action@v4
+        uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: 'chore: Update package version'
           branch: main
