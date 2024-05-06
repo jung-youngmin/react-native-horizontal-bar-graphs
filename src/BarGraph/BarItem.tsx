@@ -97,7 +97,7 @@ export default function BarItem(props: IBarItemProps) {
 	};
 
 	const getValueSuffix = useCallback(
-		(value: number, suffixCnt: number, suffixIdx: number) => {
+		(value: number, suffixCnt: number, suffixIdx: number): string => {
 			const dividing = value / suffixCnt;
 			const showUnderNum = value % suffixCnt >= suffixCnt * 0.1;
 
@@ -113,7 +113,7 @@ export default function BarItem(props: IBarItemProps) {
 					}
 				}
 			} else {
-				return value;
+				return value.toString();
 			}
 		},
 		[props.valueSuffixList],
