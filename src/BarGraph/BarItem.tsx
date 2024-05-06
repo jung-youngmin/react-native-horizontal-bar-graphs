@@ -17,6 +17,8 @@ interface IBarItemProps {
 	readonly showValue: boolean;
 	readonly labelPosition: "top" | "bottom";
 	readonly valuePosition: "left" | "right";
+	readonly valueSuffixCnt: number;
+	readonly valueSuffixList: string[];
 
 	/** 그래프에서의 색 */
 	readonly color: ColorValue;
@@ -94,6 +96,38 @@ export default function BarItem(props: IBarItemProps) {
 		}
 	};
 
+	const getValueSuffix = useCallback(
+		(value: number, suffixCnt: number, suffixIdx: number) => {
+			const dividing = value / suffixCnt;
+			const showUnderNum = value % suffixCnt >= suffixCnt * 0.1;
+
+			if (dividing >= 1) {
+				if (dividing < suffixCnt) {
+					return dividing.toFixed(showUnderNum ? 1 : 0) + props.valueSuffixList[suffixIdx] + "  ";
+				} else {
+					const nextIdx = suffixIdx + 1;
+					if (nextIdx >= props.valueSuffixList.length) {
+						return dividing.toFixed(showUnderNum ? 1 : 0) + props.valueSuffixList[suffixIdx] + "  ";
+					} else {
+						return getValueSuffix(dividing, suffixCnt, nextIdx);
+					}
+				}
+			} else {
+				return value;
+			}
+		},
+		[props.valueSuffixList],
+	);
+
+	const valueWithSuffix = useMemo(() => {
+		if (props.valueSuffixCnt <= 0) {
+			return props.value.toLocaleString();
+		} else {
+			const val = getValueSuffix(props.value, props.valueSuffixCnt, 0);
+			return val;
+		}
+	}, [props.value, props.valueSuffixCnt, props.valueSuffixList]);
+
 	const onTouching = useCallback(
 		(touched: boolean) => {
 			if (props.enableTouchHighlight) {
@@ -158,7 +192,8 @@ export default function BarItem(props: IBarItemProps) {
 								<View
 									style={[styles.valueCont, props.valuePosition === "right" && { right: 0 }, props.valuePosition === "left" && { left: 0 }]}>
 									<Text allowFontScaling={false} numberOfLines={1} style={styles.valueText}>
-										{props.value}
+										{valueWithSuffix}
+										{valPercent >= 5 ? " " : ""}
 									</Text>
 								</View>
 							)}

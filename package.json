@@ -7,9 +7,17 @@
 	"scripts": {
 		"lint": "eslint --ext .tsx --ext .ts src/",
 		"format": "prettier --check ./src",
-		"start": "rmdir /s /q Develop\\dist && tsc -w --outDir Develop\\dist",
-		"prepare": "rm -rf dist && tsc",
-		"android": "cd Develop && npm run android"
+		"start": "run-script-os",
+		"start:win32": "rmdir /s /q Develop\\dist && tsc -w --outDir Develop\\dist",
+		"start:default": "rm -rf Develop/dist && tsc -w --outDir Develop/dist",
+		"prepare": "run-script-os",
+		"prepare:win32": "rmdir /s /q dist && tsc",
+		"prepare:default": "rm -rf dist && tsc",
+		"android": "cd Develop && npm run android",
+		"avd-list": "emulator -list-avds",
+		"start-emulator": "emulator -avd Medium_Phone_API_34",
+		"ios": "cd Develop && npm run ios",
+		"pod": "cd Develop/ios && pod install && cd ../.."
 	},
 	"peerDependencies": {
 		"react": "*",
@@ -30,6 +38,7 @@
 		"jest": "^29.6.3",
 		"prettier": "2.8.8",
 		"react-test-renderer": "18.2.0",
+		"run-script-os": "^1.1.6",
 		"typescript": "5.0.4"
 	},
 	"repository": {
