@@ -136,6 +136,8 @@ only 1 required prop
 | labelStlye | X | `StyleProp<TextStyle>` | `{ color: "#999999", fontSize: barHeight / 2 }` | Styles for label<br>**NOTE:** By default, fontSize is set to `barHeight/2`.<br>**NOTE:** When you touch the bar, the text color is highlighted in the same color as the bar. If you don't want it, set `enableTouchHighlight` to `false`. |
 | showValue | X | `boolean` | `true` | Whether to show the value above the bar |
 | valuePosition | X | `"left" \| "right"` | `"right"` | Position on the bar where the value is rendered<br>[valuePosition (BarGraph only)](#valueposition-bargraph-only) |
+| valueSuffixCnt | X | `number` | `1000` | Number to attach suffix when `value` exceeds `valueSuffixCnt`<br>[valueSuffixCnt](#valuesuffixcnt--valuesuffixlist-bargraph-only) |
+| valueSuffixList | X | `string[]` | `["k", "m", "b", "t"]` | List of suffix attached to `value` after dividing `value` by `valueSuffixCnt`<br>[valueSuffixList](#valuesuffixcnt--valuesuffixlist-bargraph-only) |
 | showDivider | X | `boolean` | `true` | Whether to display a divider at certain percentages in the bar's placeholder |
 | dividerInterver | X | `4 \| 5 \| 10 \| 20 \| 25 \| 33.3 \| 50` | `20` | A number for what percentage of intervals the dividing lines are rendered.<br>*e.g.* If set to `20`, dividers will be rendered at `20%`, `40%`, `60%`, and `80%`.<br>divider가 몇%마다 표시될지 |
 | dividerHeight | X | `string \| number` | `"60%"` | Height of divider<br>When set to "100%", it is equal to the height of the bar |
@@ -336,6 +338,20 @@ If you don't want this effect, set `enableTouchHighlight` to `false`.
   // other props...
 />
 ```
+
+<br>
+
+### valueSuffixCnt & valueSuffixList (BarGraph only)
+
+`valueSuffixCnt` & `valueSuffixList` are used for simplicity depending on the digits.
+
+Suppose the `valueSuffixCnt` is `1000`, and the `valueSuffixList` is `["k", "m", "b", "t"]`.  
+*e.g.1.* The number `1234` is expressed as `"1.2k"`. (up to the first decimal place)  
+*e.g.2.* The number `20000000` is expressed by `"20m"`.
+
+**NOTE:** `valueSuffixCnt` <= 0 means No Suffix.  
+*e.g.1.* The number `1234` is expressed as `"1,234"`.  
+*e.g.2.* The number `20000000` is expressed by `"20,000,000"`.
 
 <br>
 
