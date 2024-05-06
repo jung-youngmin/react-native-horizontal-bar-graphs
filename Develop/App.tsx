@@ -8,6 +8,8 @@ import {
   Text,
   ScrollView,
   TouchableOpacity,
+  ViewStyle,
+  TextStyle,
 } from 'react-native';
 
 import {
@@ -22,14 +24,14 @@ const App = () => {
   const BAR_DATA: IBarGraphData[] = useMemo(() => {
     return [
       {
-        value: 30,
+        value: 20000000,
         label: 'Label 0',
         onPress: (label, value, color) => {
           Alert.alert(label, value + '__' + color.toString());
         },
       },
       {
-        value: 10,
+        value: 15,
         label: 'Label 1',
       },
       {
@@ -89,31 +91,41 @@ const App = () => {
         color,
         PercentLabelComponent,
       } = listProps;
+
+      const itemCont: ViewStyle = {
+        marginVertical: 8,
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        justifyContent: 'space-between',
+      };
+
+      const labelStyle: TextStyle = {
+        fontSize: 18,
+        fontWeight: 'bold',
+        color: color,
+      };
+
+      const valueCont: ViewStyle = {
+        width: 70,
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        justifyContent: 'flex-end',
+      };
+
+      const valueStyle: TextStyle = {fontSize: 16, fontWeight: 'bold'};
+      const valueSubStyle: TextStyle = {fontSize: 12};
+
       return (
         <TouchableOpacity
           // To use `TouchHighlight`, implement `onPressIn` and `onPressOut` as follows:
           onPressIn={() => onTouching(index, true)}
           onPressOut={() => onTouching(index, false)}
           onPress={() => {}}>
-          <View
-            style={{
-              marginVertical: 8,
-              flexDirection: 'row',
-              alignItems: 'baseline',
-              justifyContent: 'space-between',
-            }}>
-            <Text style={{fontSize: 18, fontWeight: 'bold', color: color}}>
-              {label}
-            </Text>
-            <View
-              style={{
-                width: 70,
-                flexDirection: 'row',
-                alignItems: 'baseline',
-                justifyContent: 'flex-end',
-              }}>
-              <Text style={{fontSize: 16, fontWeight: 'bold'}}>{value}</Text>
-              <Text style={{fontSize: 12}}>{' / ' + totalCnt}</Text>
+          <View style={itemCont}>
+            <Text style={labelStyle}>{label}</Text>
+            <View style={valueCont}>
+              <Text style={valueStyle}>{value}</Text>
+              <Text style={valueSubStyle}>{' / ' + totalCnt}</Text>
             </View>
             <PercentLabelComponent
               value={value}
@@ -126,6 +138,8 @@ const App = () => {
     },
     [],
   );
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const ListItem = React.memo(_ListItem);
 
   return (
@@ -139,6 +153,8 @@ const App = () => {
           <BarGraph
             graphData={BAR_DATA}
             style={[styles.graphContainer]}
+            valueSuffixCnt={1000}
+            // valueSuffixList={['만', '억', '조']}
             // title="Bar Graph Title"
             // titlePosition="bottom"
             // titleStyle={{marginTop: 32}}
@@ -225,7 +241,7 @@ const App = () => {
             // enableTouchHighlight={true}
             // showList={false}
             // listAnimated={true}
-            listContainerStyle={{marginTop: 16}}
+            // listContainerStyle={{marginTop: 16}}
             // ListItemComponent={ListItem}
           />
         )}

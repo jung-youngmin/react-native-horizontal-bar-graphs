@@ -47,6 +47,20 @@ export interface IBarGraphProps extends IHorizontalBarGraphsBaseProps {
 	 * @default "right"
 	 */
 	readonly valuePosition?: "left" | "right";
+	/**
+	 * Number to attach suffix when value exceeds valueSuffixCnt
+	 * value가 valueSuffixCnt을 초과할 때 suffix를 붙이기 위한 숫자
+	 * If set to 0, no suffix is appended.
+	 * 0을 설정하면 suffix를 붙이지 않습니다
+	 * @default 1000
+	 */
+	readonly valueSuffixCnt?: number;
+	/**
+	 * List of value suffix attached to value after dividing value by valueSuffixCnt
+	 * value를 valueSuffixCnt로 나눈 후 value에 붙는 value suffix의 리스트
+	 * @default ["k", "m", "b", "t"]
+	 */
+	readonly valueSuffixList?: string[];
 }
 
 export default function BarGraph(props: IBarGraphProps) {
@@ -110,6 +124,14 @@ export default function BarGraph(props: IBarGraphProps) {
 		return props.valuePosition === undefined ? "right" : props.valuePosition;
 	}, [props.valuePosition]);
 
+	const valueSuffixCnt = useMemo(() => {
+		return props.valueSuffixCnt === undefined ? 1000 : props.valueSuffixCnt;
+	}, [props.valueSuffixCnt]);
+
+	const valueSuffixList = useMemo(() => {
+		return props.valueSuffixList === undefined ? ["k", "m", "b", "t"] : props.valueSuffixList;
+	}, [props.valueSuffixList]);
+
 	return (
 		<View style={props.style}>
 			{showTitle && titlePosition === "top" && <Text style={[styles.title, props.titleStyle]}>{title}</Text>}
@@ -136,6 +158,8 @@ export default function BarGraph(props: IBarGraphProps) {
 						barHolderRightStyle={barHolderRightStyle}
 						showValue={showValue}
 						valuePosition={valuePosition}
+						valueSuffixCnt={valueSuffixCnt}
+						valueSuffixList={valueSuffixList}
 						totalCnt={totalCnt}
 						showDivider={showDivider}
 						dividerInterver={dividerInterver}
