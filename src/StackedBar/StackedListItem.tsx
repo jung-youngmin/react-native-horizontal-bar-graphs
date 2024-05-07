@@ -52,7 +52,9 @@ function _StackedListItem(props: IStackedListItemProps) {
 				{canRenderPercentLbl && props.percentPosition === "left" && (
 					<PercentLabelComponent value={props.value} total={props.totalCnt} color={props.color} />
 				)}
-				{(props.percentPosition === "right" || props.percentPosition === undefined) && <View style={styles.coloredDot} />}
+				{(props.percentPosition === "right" || props.percentPosition === undefined || props.percentPosition === "none") && (
+					<View style={styles.coloredDot} />
+				)}
 				<View style={styles.textContainer}>
 					<Text style={styles.labelStyle}>{props.label}</Text>
 					<Text>{props.value}</Text>
